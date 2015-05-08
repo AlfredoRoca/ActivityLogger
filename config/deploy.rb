@@ -11,6 +11,8 @@ set :repo_url, 'git@github.com:AlfredoRoca/ActivityLogger.git'
 set :deploy_via, :copy
 set :rails_env, 'production'
 set :rake_env, 'production'
+set :stages, %w(testing staging production) 
+set :default_stage, 'staging'
 
 # Default value for :scm is :git
 set :scm, :git
