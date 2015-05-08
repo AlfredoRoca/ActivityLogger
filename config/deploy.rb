@@ -12,7 +12,7 @@ set :deploy_via, :copy
 set :rails_env, 'production'
 set :rake_env, 'production'
 set :stages, %w(testing staging production) 
-set :default_stage, 'staging'
+set :default_stage, 'production'
 
 # Default value for :scm is :git
 set :scm, :git
