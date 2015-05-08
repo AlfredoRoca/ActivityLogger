@@ -1,0 +1,47 @@
+<h1>User report</h1>
+<h2><%= @user.name %></h2>
+
+<% unless @user.activities.empty? %>
+
+  <p>First activity: <%= localize_date(@user.activities.with_end.first.start) %></p>
+  <p>Last activity: <%= localize_date(@user.activities.with_end.last.ended) %></p>
+
+  <h3>Tasks</h3>
+  <ul>
+    <% @user.tasks.each do |task| %>
+      <li><%= task.name %></li>
+      <ul>
+        <% task.activities.for_user(@user).with_end.each do |a| %>
+          <li><%= duration_to_s(a.duration) %> </li>
+        <% end %>
+      </ul>
+      Total task activity: <%= duration_to_s(task.activities.for_user(@user).with_end.sum(:duration)) %>
+    <% end %>
+  </ul>
+
+  <h3>Projects</h3>
+  <ul>
+    <% @user.projects.each do |p| %>
+      <li><%= p.name %></li>
+      <ul>
+        <% p.tasks.each do |t| %>
+          <li><%= t.name %></li>
+          <ul>
+            <% t.activities.for_user(@user).for_project(p).with_end.each do |a| %>
+              <li><%= duration_to_s(a.duration) %></li>
+            <% end %>
+          </ul>
+          Total task activity: <%= duration_to_s(t.activities.for_user(@user).for_project(p).with_end.sum(:duration)) %>
+        <% end %>
+      </ul>
+      Total project activity: <%= duration_to_s(p.activities.for_user(@user).with_end.sum(:duration)) %>
+    <% end %>
+  </ul>
+
+  <h3>Total user activity: <%= duration_to_s(@user.activities.with_end.sum(:duration)) %></h3>
+
+<% else %>
+
+  No activity
+
+<% end %>

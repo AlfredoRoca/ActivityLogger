@@ -1,0 +1,33 @@
+<h1>Week report</h1>
+<h3><%= @week %></h3>
+
+<% unless @activities.empty? %>
+  <table>
+    <thead>
+      <tr>
+        <th>Project</th>
+        <th>Duration</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @activities.each do |a| %>
+        <tr>
+          <td>
+            <%= a[0] %>
+          </td>
+          <td>
+            <%= duration_to_s(a[1]) %></li>  
+          </td>
+        </tr>
+      <% end %>
+      <tr>
+        <td>
+          <h3><%= @activities.count %> projects, <%= @number_of_entries %> lines</h3>
+        </td>
+        <td>
+          <h3><%= duration_to_s(@total_duration) %></h3>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+<% end %>

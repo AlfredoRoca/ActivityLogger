@@ -1,0 +1,14 @@
+== README
+
+Simple activity logger to keep trace of working hours.
+
+It's in continuous development.
+
+Postgres database.
+
+Ruby 2.2.0
+Rails 4.2.0
+
+Run Rspec tests with: spring rspec
+
+After creating the database, run rake db:seed to anter the admin user (careful! deletes all users before.)

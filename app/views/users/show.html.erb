@@ -1,0 +1,12 @@
+<h1>User info</h1>
+<dl>
+	<dt>Name</dt>	
+		<dd><%= @user.name %></dd>
+	<dt>Email</dt>	
+		<dd><%= @user.email %></dd>
+	<dt>Admin?</dt>	
+		<dd><%= @user.admin %></dd>
+</dl>
+
+<%= link_to "Edit", edit_user_path(@user) %>
+<%= link_to "Back", users_path %>

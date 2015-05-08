@@ -1,0 +1,38 @@
+<%= link_to 'Edit', edit_project_path(@project) %> |
+<%= link_to 'Back', projects_path %>
+
+<p>
+  <strong>Name:</strong>
+  <%= @project.name %>
+</p>
+
+<p>Audits</p>
+<table>
+  <thead>
+    <tr>
+      <th>When</th>
+      <th>Who</th>
+      <th>What</th>
+      <th>On</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @project.audits.each do |audit| %>
+      <tr>
+        <td>
+          <%= localize_date(audit.created_at) %>
+        </td>
+        <td>
+          <%= audit.user_id %>
+        </td>
+        <td>
+          <%= audit.action %>
+        </td>
+        <td>
+          <%= audit.audited_changes %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+

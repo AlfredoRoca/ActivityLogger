@@ -1,0 +1,8 @@
+ca:
+  project_id: Projecte
+  task_id: Tasca
+  subtask_id: Subtasca
+  activity_id: Activitat
+  start: Inici
+  end: Fi
+  update: Actualitzar

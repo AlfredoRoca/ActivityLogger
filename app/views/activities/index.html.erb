@@ -1,0 +1,38 @@
+<h1><%= t :Listing_activities %></h1>
+<%= link_to 'New Activity', new_activity_path %>
+
+<table>
+  <thead>
+    <tr>
+      <th>PId</th>
+      <th>Project</th>
+      <th>Task</th>
+      <th>Subtask</th>
+      <th>User</th>
+      <th>Start</th>
+      <th>End</th>
+      <th>Duration</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @activities.each do |activity| %>
+      <tr>
+        <td><%= activity.project.id %></td>
+        <td><%= activity.project.name %></td>
+        <td><%= activity.task.name %></td>
+        <td><%= activity.subtask.name if activity.subtask %></td>
+        <td><%= activity.user.name if activity.user %></td>
+        <td><%= localize_date activity.start %></td>
+        <td><%= localize_date activity.ended %></td>
+        <td><%= duration_to_s(activity.duration) %></td>
+        <td><%= link_to 'Show', activity %></td>
+        <td><%= link_to 'Edit', edit_activity_path(activity) %></td>
+        <td><%= link_to 'Destroy', activity, method: :delete, data: { confirm: 'Are you sure?' } if current_user && current_user.admin? %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<p><%= paginate @activities %></p>

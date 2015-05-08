@@ -1,0 +1,37 @@
+<h1>
+  <strong>Project:</strong>
+  <%= @activity.project.name %>
+</h1>
+
+<h2>
+  <strong>Task:</strong>
+  <%= @activity.task.name %>
+</h2>
+
+<h3>
+  <strong>Subtask:</strong>
+  <%= @activity.subtask.name if @activity.subtask %>
+</h3>
+
+<p>
+  <strong>User:</strong>
+  <%= @activity.user.name if @activity.user %>
+</p>
+
+<p>
+  <strong>Start:</strong>
+  <%= localize_date @activity.start %>
+</p>
+
+<p>
+  <strong>End:</strong>
+  <%= localize_date @activity.ended %>
+</p>
+
+<p>
+  <strong>Duration:</strong>
+  <%= @activity.duration %> seconds => <%= duration_to_s(@activity.duration) %>
+</p>
+
+<%= link_to 'Edit', edit_activity_path(@activity) %> |
+<%= link_to 'Back', activities_path %>

@@ -1,0 +1,47 @@
+<%= form_for(@activity) do |f| %>
+
+  <% if @activity.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@activity.errors.count, "error") %> prohibited this activity from being saved:</h2>
+
+      <ul>
+      <% @activity.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label  t :project_id %><br>
+    <% f.collection_radio_buttons :project_id, Project.activity_ordered, :id, :name %>
+    <%= f.collection_select :project_id, Project.open.alfa_order, :id, :name,  include_blank: true %>
+  </div>
+
+  <div class="field">
+    <%= f.label t :task_id %><br>
+    <%= f.collection_select :task_id, Task.all, :id, :name, include_blank: true %>
+  </div>
+
+  <div class="field">
+    <%= f.label t :subtask_id %><br>
+    <%= f.collection_select :subtask_id, Subtask.all, :id, :name, include_blank: true %>
+  </div>
+
+  <div class="field">
+    <%= f.label t :start %>
+    <%= f.text_field :start, value: localize_date(@activity.start) %>
+  </div>
+
+  <% if @activity.start %>
+    <div class="field">
+      <%= f.label t :ended %>
+      <%= f.text_field :ended, value: localize_date(@activity.ended) %>
+    </div>
+  <% end %>
+
+
+  <div class="actions">
+    <%= f.submit t :update %>
+  </div>
+<% end %>

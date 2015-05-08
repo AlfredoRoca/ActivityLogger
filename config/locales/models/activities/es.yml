@@ -1,0 +1,7 @@
+es:
+  project_id: Proyecto
+  task_id: Tarea
+  subtask_id: Subtarea
+  activity_id: Actividad
+  start: Inicio
+  ended: Fin

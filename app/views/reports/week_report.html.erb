@@ -1,0 +1,10 @@
+<h1>Week report</h1>
+<%= form_tag new_week_report_path, id: :form_week_select do %>
+  <%= label_tag :weekpicker, "Week:" %>
+  <%= text_field_tag :weekpicker, nil, size: 35 %>
+  <%= hidden_field_tag :start %>
+  <%= hidden_field_tag :ended %>
+  <%= submit_tag "Get report" %>
+<% end %>
+
+<div id="content"></div>
