@@ -70,6 +70,7 @@ Rails.application.routes.draw do  resources :users
   resources :tasks
   resources :activities, concerns: :paginatable
   resources :projects
+  resources :teams
 
   root 'activities#index'
 
