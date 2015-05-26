@@ -1,3 +1,7 @@
+<% content_for :js do %>
+  <%= javascript_include_tag 'activity.js', 'data-turbolinks-track' => false %>
+<% end %>
+
 <%= form_for(@activity) do |f| %>
 
   <% if @activity.errors.any? %>
@@ -30,13 +34,26 @@
 
   <div class="field">
     <%= f.label t :start %>
-    <%= f.text_field :start, value: localize_date(@activity.start) %>
+    <div class="input-append-date" id="start">
+      <input id="activity_start" name="activity[start]" type="text" class="form-control" value="<%= localize_date(@activity.start) %>">
+      <span class="add-on">
+        <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+        </i>
+      </span>
+    </div>
   </div>
+
 
   <% if @activity.start %>
     <div class="field">
       <%= f.label t :ended %>
-      <%= f.text_field :ended, value: localize_date(@activity.ended) %>
+      <div class="input-append-date" id="ended">
+        <input id="activity_ended" name="activity[ended]" type="text"  value="<%= localize_date(@activity.ended) %>" class="form-control">
+        <span class="add-on">
+          <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+          </i>
+        </span>
+      </div>
     </div>
   <% end %>
 
@@ -45,3 +62,5 @@
     <%= f.submit t :update %>
   </div>
 <% end %>
+
+<script>set_pickers();</script>

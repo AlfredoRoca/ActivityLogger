@@ -88,3 +88,4 @@ group :development do
   gem 'highline', '~> 1.7.1'
   gem 'rvm1-capistrano3', require: false
 end
+
