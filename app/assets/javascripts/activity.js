@@ -1,6 +1,4 @@
-var set_pickers;
-
-set_pickers = function () {
+var set_pickers = function () {
   $('#start').datetimepicker({
     format: 'dd/MM/yyyy hh:mm',
     language: 'es',
