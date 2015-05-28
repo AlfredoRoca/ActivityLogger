@@ -1,31 +1,38 @@
-var set_pickers = function () {
-  $('#start').datetimepicker({
-    format: 'dd/MM/yyyy hh:mm',
-    language: 'es',
-    weekStart: 1,
-    maskInput: true,           // disables the text input mask
-    pickDate: true,            // disables the date picker
-    pickTime: true,            // disables de time picker
-    pick12HourFormat: false,   // enables the 12-hour format time picker
-    pickSeconds: false,         // disables seconds in the time picker
-    startDate: Date.now,      // set a minimum date
-    endDate: Infinity          // set a maximum date
-      });
+var setupDateTimePickers = function (start, ended) {
+  $('#datetimepicker_start').datetimepicker({
+    format: "D/M/YYYY HH:mm",
+    defaultDate: start,
+    collapse: false,
+    sideBySide: true,
+    calendarWeeks: true,
+    showTodayButton: true,
+    showClear: true,
+    showClose: true,
+    stepping: 15,
+    useCurrent: false,
+    locale: 'es'
+  });
+  $('#datetimepicker_ended').datetimepicker({
+    format: "D/M/YYYY HH:mm",
+    defaultDate: ended,
+    collapse: false,
+    sideBySide: true,
+    calendarWeeks: true,
+    showTodayButton: true,
+    showClear: true,
+    showClose: true,
+    stepping: 15,
+    useCurrent: false,
+    locale: 'es'
+  });
+  // $("#datetimepicker_start").on("dp.change", function (e) {
+  //     $('#datetimepicker_ended').data("DateTimePicker").minDate(e.date);
+  // });
+  // $("#datetimepicker_ended").on("dp.change", function (e) {
+  //     $('#datetimepicker_start').data("DateTimePicker").maxDate(e.date);
+  // });
 
-  $('#ended').datetimepicker({
-    format: 'dd/MM/yyyy hh:mm',
-    language: 'es',
-    weekStart: 1,
-    maskInput: true,           // disables the text input mask
-    pickDate: true,            // disables the date picker
-    pickTime: true,            // disables de time picker
-    pick12HourFormat: false,   // enables the 12-hour format time picker
-    pickSeconds: false,         // disables seconds in the time picker
-    startDate: Date.now,      // set a minimum date
-    endDate: Infinity          // set a maximum date
-      });
-  
-};
+}
 
-$(document).ready(set_pickers);
-$(document).on('page:load', set_pickers);
+// $(document).ready(setupDateTimePickers);
+$(document).on('page:load', setupDateTimePickers(moment(),moment()));
