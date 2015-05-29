@@ -34,5 +34,5 @@ var setupDateTimePickers = function (start, ended) {
 
 }
 
-// $(document).ready(setupDateTimePickers);
+$(document).ready(setupDateTimePickers);
 $(document).on('page:load', setupDateTimePickers(moment(),moment()));
