@@ -19,5 +19,5 @@ var setupWeekPicker = function () {
 
 }
 
-$(document).ready(setupWeekPicker);
+// $(document).ready(setupWeekPicker);
 $(document).on('page:load', setupWeekPicker);
