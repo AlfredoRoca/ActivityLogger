@@ -19,4 +19,5 @@ class Project < ActiveRecord::Base
   scope :first_open, -> { order(closed: :desc) }
   audited
 
+  paginates_per 15
 end

@@ -11,17 +11,7 @@
 </head>
 <body>
 
-<nav>
 	<%= render 'layouts/main_menu' %>
-	<% if current_user %>
-		<%= link_to "Edit profile", profile_path %>
-		<%= link_to "Logout", :logout, method: :post %>
-		Welcome <%= current_user.name %>
-	<% else %>
-		<%= link_to "Register", new_user_path %>
-		<%= link_to "Login", :login %>
-	<% end %>
-</nav>
 	<div>
 		<p id="notice"><%= flash[:notice] %></p>
 		<p id="alert"><%= flash[:alert] %></p>

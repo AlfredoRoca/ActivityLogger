@@ -32,7 +32,7 @@ class Activity < ActiveRecord::Base
 
   scope :ordered_last_first, -> { order('start DESC, project_id ASC, task_id ASC, user_id ASC') }
 
-  paginates_per 20
+  paginates_per 15
 
   before_save :calc_duration
 

@@ -13,5 +13,6 @@
 class Subtask < ActiveRecord::Base
   belongs_to :task, dependent: :destroy
   has_many :activities
+  default_scope -> { order(:name) }
   scope :how_many_new_activity, -> { limit(2) }
 end

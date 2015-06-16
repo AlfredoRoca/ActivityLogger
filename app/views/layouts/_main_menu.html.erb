@@ -1,6 +1,38 @@
-<%= link_to "Projects", projects_path %>
-<%= link_to "Tasks", tasks_path %>
-<%= link_to "Subtasks", subtasks_path %>
-<%= link_to "Activity", activities_path %>
-<%= link_to "Users", users_path %>
-<%= link_to "Weekly Reports", week_report_path %>
+<nav class="navbar navbar-default navbar-fixed-top">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">ActivityLogger</a>
+    </div>
+
+      <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li><%= link_to "Projects", projects_path %></li>
+        <li><%= link_to "Tasks", tasks_path %></li>
+        <li><%= link_to "Subtasks", subtasks_path %></li>
+        <li><%= link_to "Activity", activities_path %></li>
+        <li><%= link_to "Users", users_path %></li>
+        <li><%= link_to "Weekly Reports", week_report_path %></li>
+      </ul>
+
+      <ul class="nav navbar-nav navbar-right">
+        <% if current_user %>
+          <p class="navbar-text">Welcome <%= current_user.name %></p>
+          <li><%= link_to "Edit profile", profile_path %></li>
+          <li><%= link_to "Logout", :logout, method: :post %></li>
+        <% else %>
+          <li><%= link_to "Register", new_user_path %></li>
+          <li><%= link_to "Login", :login %></li>
+        <% end %>
+      </ul>
+
+    </div>
+
+</nav>
