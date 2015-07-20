@@ -6,8 +6,10 @@ class ActivitiesController < ApplicationController
     # render json: @parsed_lines
   end
 
-  def execute_import_activities
-    Activity.read_activity_file
+  def execute_import
+    result = Activity.execute_import(current_user.id)
+    # render text: result
+    redirect_to activities_url, notice: "#{result} activities were created."
   end
 
   # GET /activities

@@ -47,6 +47,29 @@ class Activity < ActiveRecord::Base
   	end
   end
 
+  # EXECUTE IMPORT
+  # 
+  # Expected hash
+  # line = { "line_num": counter, "proj": proj, "task": task, "subtask": subtask, "start": start, "ended": ended, "duration": duration, "invalid": true, 
+  #     "objects": line_objects })
+  def self.execute_import(uid)
+    parsed_lines = self.read_activity_file
+    result = []
+    counter = 0
+    parsed_lines.each do |line|
+      project_id = line[:objects][:proj].id
+      task_id = line[:objects][:task].id
+      subtask_id = line[:objects][:subtask].blank? ? nil : line[:objects][:subtask].id
+      user_id = uid
+      start = line[:start]
+      ended = line[:ended]
+      duration = line[:duration]
+      # result << { "proj": project_id, "task": task_id, "subtask": subtask_id, "user": user_id, "start": start, "ended": ended, "duration": duration }
+      Activity.create({ project_id: project_id, task_id: task_id, subtask_id: subtask_id, user_id: user_id, start: start.getutc, ended: ended, duration: duration })
+      counter += 1
+    end
+    counter
+  end
 
   # PARSE TEXT FILE WITH ACTIVITY LINES
   # 
@@ -60,7 +83,7 @@ class Activity < ActiveRecord::Base
           parsed_lines << self.parse_file_line(line, counter) unless line.start_with?"#","\n"
         end
       end
-      parsed_lines
+      parsed_lines.flatten!
     else
       return ACTIVITY_IMPORT_FILE + " not found"
     end
@@ -68,18 +91,19 @@ class Activity < ActiveRecord::Base
 
   private
 
-  def self.parse_file_line(line, counter)
-    # TODO extract subtasks and add to subtasks table if new
-    # # sintaxis
-    # # DD/MM[YY default current] PROJ [TASK default prog [SUBTASK]] HH:MM-HH:MM [HH:MM-HH:MM] [HH:MM-HH:MM] ...
-    # ## PROJ name or alias, case insensitive
-    # ## HH:MM-HH:MM start-end
+  # TODO extract subtasks and add to subtasks table if new
+  # # sintaxis
+  # # DD/MM[YY default current] PROJ [TASK default prog [SUBTASK]] HH:MM-HH:MM [HH:MM-HH:MM] [HH:MM-HH:MM] ...
+  # ## PROJ name or alias, case insensitive
+  # ## HH:MM-HH:MM start-end
 
-    # Example
-    # 16/6 shk prog 20:00-5:00
-    # 17/6 shk prog 11:30-14:00 15:00-18:00
+  # Example
+  # 16/6 shk prog 20:00-5:00
+  # 17/6 shk prog 11:30-14:00 15:00-18:00
+  def self.parse_file_line(line, counter)
 
     default_task = "prog"
+    result = []
 
     elements = line.split
     # => ["17/6", "shk", "prog", "11:30-14:00", "15:00-18:00"]
@@ -104,11 +128,13 @@ begin
       ended = DateTime.strptime(ended_date + ' ' + off, "%d/%m/%Y %H:%M")
       ended += 1 if start > ended
       duration = ApplicationController.helpers.duration_to_s(((ended - start)*24*60*60).to_i)
-      return self.parse_activity_line(counter, proj, task, subtask, start, ended, duration)
+      result << self.parse_activity_line(counter, proj, task, subtask, start, ended, duration)
     end
+    return result
   rescue => error
     line = { "line_num": counter, "proj": proj, "task": task, "subtask": subtask, "start": "", "ended": "", "duration": "", "invalid": true }
     line.merge!({ "error": error.inspect })
+    result << line
   end
     
   end
@@ -121,9 +147,9 @@ begin
   end
 
   def self.get_line_objects(line)
-    proj = Project.where("name = '" + line[:proj] + "' or alias = '" + line[:proj] + "'").first
-    task = Task.where("name = '" + line[:task] + "' or code = '" + line[:task] + "'").first
-    subtask = Subtask.where("name = '" + line[:subtask] + "' or code = '" + line[:subtask] + "'").first if line[:subtask]
+    proj = Project.where("lower(name) = lower('" + line[:proj] + "') or lower(alias) = lower('" + line[:proj] + "')").first
+    task = Task.where("lower(name) = lower('" + line[:task] + "') or lower(code) = lower('" + line[:task] + "')").first
+    subtask = Subtask.where("lower(name) = ('" + line[:subtask] + "') or lower(code) = lower('" + line[:subtask] + "')").first if line[:subtask]
     subtask ||= nil
     {"proj": proj, "task": task, "subtask": (subtask ? subtask.id : "")}
   end
