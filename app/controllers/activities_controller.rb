@@ -1,6 +1,15 @@
 class ActivitiesController < ApplicationController
   before_action :set_activity, only: [:show, :edit, :update, :destroy]
 
+  def check_import_file
+    @parsed_lines = Activity.read_activity_file
+    # render json: @parsed_lines
+  end
+
+  def execute_import_activities
+    Activity.read_activity_file
+  end
+
   # GET /activities
   # GET /activities.json
   def index
