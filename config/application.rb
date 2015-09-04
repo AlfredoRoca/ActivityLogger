@@ -53,7 +53,7 @@ module ActivityLogger
     if Rails.env.development?
       # Update version file from latest git 
       File.open('REVISION', 'w') do |file|
-        version = `git log -1 --date=rfc --format='%ad :: %h'`
+        version = `git log -1 --date=short --format='%ad-%h'`
         file.write version
       end
     end
@@ -61,7 +61,7 @@ module ActivityLogger
     # 
     # by Capistrano
     # 
-    # Usage: Shk::Application::REVISION
+    # Usage: ActivityLogger::Application::REVISION
     # 
     REVISION = File.read('REVISION')
 
