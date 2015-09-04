@@ -1,13 +1,22 @@
 namespace :setup do
 
-  desc "Upload deploy-production, database.yml and secrets.yml files."
+  desc "Upload sensitive files."
   task :upload_sensitive_files do
     on roles(:app) do
       execute "mkdir -p #{shared_path}/config"
       upload! StringIO.new(File.read("config/database.yml")), "#{shared_path}/config/database.yml"
       upload! StringIO.new(File.read("config/secrets.yml")), "#{shared_path}/config/secrets.yml"
-      execute "mkdir -p #{shared_path}/config/deploy"
-      upload! StringIO.new(File.read("config/deploy/production.rb")), "#{shared_path}/config/deploy/production.rb"
+      upload! StringIO.new(File.read("config/deploy/staging.rb")), "#{shared_path}/config/deploy/staging.rb"
+      upload! StringIO.new(File.read("config/local_env.yml")), "#{shared_path}/config/local_env.yml"
+        puts "*************************************************************"
+        puts "*************************************************************"
+        puts "*************************************************************"
+        puts "*************************************************************"
+        puts " IMPORTANT! Edit and modify LOCAL_ENV.YML & DATABASE.YML"
+        puts "*************************************************************"
+        puts "*************************************************************"
+        puts "*************************************************************"
+        puts "*************************************************************"
     end
   end
 
