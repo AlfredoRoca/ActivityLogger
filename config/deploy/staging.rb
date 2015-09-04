@@ -15,7 +15,18 @@
 # server list. The second argument is a, or duck-types, Hash and is
 # used to set extended properties on the server.
 
-# server 'example.com', user: 'deploy', roles: %w{web app}, my_property: :my_value
+# DREAMHOST
+server '67.205.57.114', user: 'deployer', roles: %w{web app db}, primary: true, port: 22
+
+set :deploy_to, '/var/www/shk/'
+set :use_sudo, false
+# set :deploy_user, 'deployer'
+
+set :rvm_ruby_version, '2.2.0@shk'
+
+set :rails_env, 'staging'
+set :rake_env, 'staging'
+
 
 
 # Custom SSH Options
