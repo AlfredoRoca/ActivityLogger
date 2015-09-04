@@ -16,13 +16,13 @@
 # used to set extended properties on the server.
 
 # DREAMHOST
-server '67.205.57.114', user: 'deployer', roles: %w{web app db}, primary: true, port: 53100
+server '67.205.57.114', user: 'alfredo', roles: %w{web app db}, primary: true, port: 53100
 
-set :deploy_to, '/var/www/shk/'
+set :deploy_to, '/home/alfredo/rails_apps/activity_logger'
 set :use_sudo, false
-# set :deploy_user, 'deployer'
+# set :deploy_user, 'alfredo'
 
-set :rvm_ruby_version, '2.2.0@shk'
+set :rvm_ruby_version, '2.2.0@activity_logger'
 
 set :rails_env, 'staging'
 set :rake_env, 'staging'
