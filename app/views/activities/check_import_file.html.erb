@@ -1,0 +1,42 @@
+<h1>Import checking</h1>
+<%= link_to 'Back', :back, class: "btn btn-default btn-lg" %>
+
+<table class="table table-stripped table-condensed">
+  <thead>
+    <tr>
+      <th>Line</th>
+      <th>Project</th>
+      <th>Task</th>
+      <th>Subtask</th>
+      <th>Start</th>
+      <th>End</th>
+      <th>Duration</th>
+      <th>Invalid?</th>
+      <th>Error</th>
+      <th>Objects</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @parsed_lines.each do |line| %>
+      <% klass = line[:invalid] && line[:invalid] ? "invalid-line" : "" %>
+
+      <tr class=<%= klass %>>
+        <td><%= line[:line_num] if line[:line_num] %></td>
+        <td><%= line[:proj] if line[:proj] %></td>
+        <td><%= line[:task] if line[:task] %></td>
+        <td><%= line[:subtask] if line[:subtask] %></td>
+        <td><%= localize_date(line[:start]) if line[:start] %></td>
+        <td><%= localize_date(line[:ended]) if line[:ended] %></td>
+        <td><%= line[:duration] if line[:duration] %></td>
+        <td><%= line[:invalid] if line[:invalid] %>
+        <td><%= line[:error] if line[:error] %></td>
+        <td><%= line[:objects] if line[:objects] %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= form_tag execute_import_path do -%>
+  <%= submit_tag "Execute import", class: "btn btn-default btn-lg" %>
+<% end -%>

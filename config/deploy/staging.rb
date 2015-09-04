@@ -16,7 +16,7 @@
 # used to set extended properties on the server.
 
 # DREAMHOST
-server '67.205.57.114', user: 'deployer', roles: %w{web app db}, primary: true, port: 22
+server '67.205.57.114', user: 'deployer', roles: %w{web app db}, primary: true, port: 53100
 
 set :deploy_to, '/var/www/shk/'
 set :use_sudo, false

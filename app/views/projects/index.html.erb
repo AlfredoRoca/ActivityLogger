@@ -6,6 +6,7 @@
   <thead>
     <tr>
       <th><%= t :Name %></th>
+      <th>Alias</th>
       <th><%= t :Closed %></th>
       <th>Audits</th>
       <th colspan="5"></th>
@@ -16,6 +17,7 @@
     <% @projects.each do |project| %>
       <tr>
         <td><%= project.name %></td>
+        <td><%= project.alias %></td>
         <td><%= project.closed %></td>
         <td><%= project.audits.count %></td>
         <td><%= link_to "Report", project_report_path(project) %></td>
