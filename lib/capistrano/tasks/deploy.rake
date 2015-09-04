@@ -18,15 +18,12 @@ namespace :deploy do
         if server == "staging"
           execute "~/.rvm/wrappers/default/thin #{command} -C /etc/thin/activity_logger.yml"
         else # == "production"
-          execute "/home/deployer/.rvm/wrappers/ruby-2.2.0@shk/thin #{command} -C /etc/thin/shk.yml"  # DIGITAL SHK-2
-          # execute "sudo /home/alfredo/.rvm/wrappers/ruby-2.2.0@global/thin #{command} -C /etc/thin/shk.yml"  # NAIROBI
+          execute "/home/deployer/.rvm/wrappers/ruby-2.2.0@activity_logger/thin #{command} -C /etc/thin/activity_logger.yml"
         end
       end
     end
   end
 
-
-# after :published, :restart
 after :published, :restart
 
 end
