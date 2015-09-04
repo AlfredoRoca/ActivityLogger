@@ -1,6 +1,17 @@
 class ActivitiesController < ApplicationController
   before_action :set_activity, only: [:show, :edit, :update, :destroy]
 
+  def check_import_file
+    @parsed_lines = Activity.read_activity_file
+    # render json: @parsed_lines
+  end
+
+  def execute_import
+    result = Activity.execute_import(current_user.id)
+    # render text: result
+    redirect_to activities_url, notice: "#{result} activities were created."
+  end
+
   # GET /activities
   # GET /activities.json
   def index

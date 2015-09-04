@@ -86,6 +86,9 @@ Rails.application.routes.draw do  resources :users
 
   get '/version'            => 'welcome#version'
 
+  get '/check_import_file'         => 'activities#check_import_file', as: :check_import_file
+  post '/execute_import'           => 'activities#execute_import',    as: :execute_import
+
   # this must be the last line
   # backup route
   match '*path', via: :all, to: 'activities#index'

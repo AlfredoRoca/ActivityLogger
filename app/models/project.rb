@@ -16,7 +16,7 @@ class Project < ActiveRecord::Base
   scope :activity_ordered, -> { order(id: :desc) }
   scope :alfa_order, -> { order(:name) }
   scope :open, -> { where(closed: false) }
-  scope :first_open, -> { order(closed: :desc) }
+  scope :first_open, -> { order(:closed) }
   audited
 
   paginates_per 15
