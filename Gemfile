@@ -67,7 +67,7 @@ group :development do
   gem "capistrano-rvm"
   # IO lib to hide password input when doing capistrano
   gem 'highline', '~> 1.7.1'
-  # gem 'rvm1-capistrano3', require: false
+  gem 'rvm1-capistrano3', require: false
 # speed up development environment
   gem 'rails-dev-boost', :git => 'git://github.com/thedarkone/rails-dev-boost.git'
   gem 'rb-inotify', '>= 0.8.8'
