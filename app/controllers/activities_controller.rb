@@ -1,6 +1,17 @@
 class ActivitiesController < ApplicationController
   before_action :set_activity, only: [:show, :edit, :update, :destroy]
 
+  def check_import_file
+    @parsed_lines = Activity.read_activity_file
+    # render json: @parsed_lines
+  end
+
+  def execute_import
+    result = Activity.execute_import(current_user.id)
+    # render text: result
+    redirect_to activities_url, notice: "#{result} activities were created."
+  end
+
   # GET /activities
   # GET /activities.json
   def index
@@ -33,11 +44,11 @@ class ActivitiesController < ApplicationController
 
     respond_to do |format|
       if @activity.save
-        format.html { redirect_to @activity, notice: 'Activity was successfully created.' }
+        format.html { redirect_to activities_url, notice: 'Activity was successfully created.' }
         format.json { render :show, status: :created, location: @activity }
       else
         format.html { render :new }
-        format.json { render json: @activity.errors, status: :unprocessable_entity }
+        format.json { render json: activities_url.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -48,7 +59,7 @@ class ActivitiesController < ApplicationController
     # render text: params
     respond_to do |format|
       if @activity.update(activity_params.merge(user_id: current_user.id))
-        format.html { redirect_to @activity, notice: 'Activity was successfully updated.' + params.to_json }
+        format.html { redirect_to @activity, notice: 'Activity was successfully updated.' }
         format.json { render :show, status: :ok, location: @activity }
       else
         format.html { render :edit }

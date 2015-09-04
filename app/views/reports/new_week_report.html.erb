@@ -1,8 +1,8 @@
 <h1>Week report</h1>
-<h3><%= @week %></h3>
+<h3>Semana <%= @week %>: <%= @start %> - <%= @ended %></h3>
 
 <% unless @activities.empty? %>
-  <table>
+  <table class="table table-condensed">
     <thead>
       <tr>
         <th>Project</th>
@@ -22,7 +22,7 @@
       <% end %>
       <tr>
         <td>
-          <h3><%= @activities.count %> projects, <%= @number_of_entries %> lines</h3>
+          <h3><%= @activities.count %> projects / <%= @number_of_entries %> lines</h3>
         </td>
         <td>
           <h3><%= duration_to_s(@total_duration) %></h3>

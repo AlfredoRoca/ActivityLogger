@@ -1,0 +1,13 @@
+// "bootstrap-sprockets" must be imported before "bootstrap" and "bootstrap/variables"
+@import "bootstrap-sprockets";
+// @import "bootstrap-variables";
+@import "bootstrap";
+@import 'bootstrap-datetimepicker';
+
+@import "reports";
+@import "scaffolds";
+@import "activities";
+
+body {
+  padding-top: 35px;
+}

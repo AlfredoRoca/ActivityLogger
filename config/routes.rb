@@ -70,6 +70,7 @@ Rails.application.routes.draw do  resources :users
   resources :tasks
   resources :activities, concerns: :paginatable
   resources :projects
+  resources :teams
 
   root 'activities#index'
 
@@ -83,6 +84,14 @@ Rails.application.routes.draw do  resources :users
   get 'week_report'                => 'reports#week_report',      as: 'week_report'
   post 'new_week_report'            => 'reports#new_week_report', as: 'new_week_report'
 
+  get '/version'            => 'welcome#version'
+
+  get '/check_import_file'         => 'activities#check_import_file', as: :check_import_file
+  post '/execute_import'           => 'activities#execute_import',    as: :execute_import
+
+  # this must be the last line
+  # backup route
+  match '*path', via: :all, to: 'activities#index'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

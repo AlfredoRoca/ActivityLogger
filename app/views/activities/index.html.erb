@@ -1,7 +1,8 @@
 <h1><%= t :Listing_activities %></h1>
-<%= link_to 'New Activity', new_activity_path %>
+<%= link_to 'New Activity', new_activity_path, class: "btn btn-default btn-lg" %>
+<%= link_to 'Import activities from file', check_import_file_path, class: "btn btn-default btn-lg" %>
 
-<table>
+<table class="table table-stripped table-condensed">
   <thead>
     <tr>
       <th>PId</th>

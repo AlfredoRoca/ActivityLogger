@@ -1,3 +1,7 @@
+<% content_for :js do %>
+  <%= javascript_include_tag 'activity.js', 'data-turbolinks-track' => false %>
+<% end %>
+
 <%= form_for(@activity) do |f| %>
 
   <% if @activity.errors.any? %>
@@ -28,20 +32,38 @@
     <%= f.collection_select :subtask_id, Subtask.all, :id, :name, include_blank: true %>
   </div>
 
-  <div class="field">
-    <%= f.label t :start %>
-    <%= f.text_field :start, value: localize_date(@activity.start) %>
-  </div>
-
-  <% if @activity.start %>
-    <div class="field">
-      <%= f.label t :ended %>
-      <%= f.text_field :ended, value: localize_date(@activity.ended) %>
+  <!-- date-time pickers -->
+  <div class="row">
+    <div class="col-md-3 col-md-offset-0 col-sm-4 col-sm-offset-0">
+      <div class="datetime-pickers-group">
+        <div class="form-group">
+          <%= f.label t :start %>
+          <div class='input-group date' id='datetimepicker_start'>
+              <input type='text' class="form-control" id="activity_start" name="activity[start]" />
+              <span class="input-group-addon">
+                  <span class="glyphicon glyphicon-calendar"></span>
+              </span>
+          </div>
+        </div>          
+        <div class="form-group">
+          <%= f.label t :ended %>
+            <div class='input-group date' id='datetimepicker_ended'>
+                <input type='text' class="form-control" id="activity_ended" name="activity[ended]" />
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+            </div>
+        </div>
+      </div>        
     </div>
-  <% end %>
-
+  </div>
+<!-- date-time pickers -->
 
   <div class="actions">
     <%= f.submit t :update %>
   </div>
 <% end %>
+
+<script>
+  setupDateTimePickers("<%= @activity.start %>", "<%= @activity.ended %>");
+</script>

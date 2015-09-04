@@ -12,7 +12,7 @@
 
 	<div class="field">
 		<%= f.label :name %>
-		<%= f.text_field :name %>
+		<%= f.text_field :name, autotficus: true %>
 	</div>
 	<div class="field">
 		<%= f.label :email %>
@@ -22,6 +22,10 @@
 	  <div class="field">
 	    <%= f.label :admin %><br>
 	    <%= f.check_box :admin %>
+	  </div>
+	  <div class="field">
+	    <%= f.label :leader %><br>
+	    <%= f.check_box :leader %>
 	  </div>
 	<% end %>
  	<div class="field">

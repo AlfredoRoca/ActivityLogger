@@ -32,5 +32,38 @@ module ActivityLogger
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true
 
+    # 
+    # read env vars file and export vars
+    # 
+    config.before_configuration do
+      # env_file = File.join(Rails.root, 'config', 'local_env.yml')
+      # YAML.load(File.open(env_file)).each do |key, value|
+      #   ENV[key.to_s] = value
+      # end if File.exists?(env_file)
+      filepath = Rails.root + 'config/local_env.yml'
+      if File.exists?(filepath)
+        lines = IO.readlines(filepath)
+        lines.each do |l|
+          ENV[l.split('=')[0]] = l.split('=')[1]
+        end
+      end
+    end
+
+    # Only attempt update on local machine
+    if Rails.env.development?
+      # Update version file from latest git 
+      File.open('REVISION', 'w') do |file|
+        version = `git log -1 --date=rfc --format='%ad :: %h'`
+        file.write version
+      end
+    end
+
+    # 
+    # by Capistrano
+    # 
+    # Usage: Shk::Application::REVISION
+    # 
+    REVISION = File.read('REVISION')
+
   end
 end

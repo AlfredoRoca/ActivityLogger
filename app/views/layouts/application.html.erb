@@ -4,29 +4,23 @@
   <title>ActivityLogger</title>
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= yield :js if content_for?(:js) %>
   <%= favicon_link_tag 'favicon.ico' %>
   <%= csrf_meta_tags %>
 
 </head>
 <body>
 
-<nav>
 	<%= render 'layouts/main_menu' %>
-	<% if current_user %>
-		<%= link_to "Edit profile", profile_path %>
-		<%= link_to "Logout", :logout, method: :post %>
-		Welcome <%= current_user.name %>
-	<% else %>
-		<%= link_to "Register", new_user_path %>
-		<%= link_to "Login", :login %>
-	<% end %>
-</nav>
 	<div>
 		<p id="notice"><%= flash[:notice] %></p>
 		<p id="alert"><%= flash[:alert] %></p>
 	</div>
-
-<%= yield %>
+<div class="container">
+  <div class="row">
+    <%= yield %>
+  </div>
+</div>
 
 </body>
 </html>

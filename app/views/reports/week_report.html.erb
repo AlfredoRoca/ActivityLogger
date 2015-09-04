@@ -1,10 +1,32 @@
+<% content_for :js do %>
+  <%= javascript_include_tag 'week-picker.js', 'data-turbolinks-track' => false %>
+<% end %>
+
 <h1>Week report</h1>
 <%= form_tag new_week_report_path, id: :form_week_select do %>
-  <%= label_tag :weekpicker, "Week:" %>
-  <%= text_field_tag :weekpicker, nil, size: 35 %>
+  <!-- date-time pickers -->
+  <div class="row">
+    <div class="col-md-3 col-md-offset-0 col-sm-4 col-sm-offset-0">
+      <div class="datetime-pickers-group">
+        <div class="form-group">
+          <%= label_tag "Elige inicio semana" %>
+          <div class='input-group date' id='datetimepicker_week'>
+              <input type='text' class="form-control" id="activity_start" name="activity[start]" />
+              <span class="input-group-addon">
+                  <span class="glyphicon glyphicon-calendar"></span>
+              </span>
+          </div>
+        </div>          
+      </div>        
+    </div>
+  </div>
+<!-- date-time pickers -->
   <%= hidden_field_tag :start %>
   <%= hidden_field_tag :ended %>
-  <%= submit_tag "Get report" %>
+  <%= hidden_field_tag :week %>
+  <%= submit_tag "Get report", class: "btn btn-default" %>
 <% end %>
 
 <div id="content"></div>
+
+<script>setupWeekPicker();</script>

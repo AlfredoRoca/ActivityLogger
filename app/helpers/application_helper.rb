@@ -1,7 +1,15 @@
 module ApplicationHelper
   
+  def localize_date_with_weekday(date)
+    I18n.l date, format: "%a %d/%m/%Y %H:%M" if date
+  end
+
   def localize_date(date)
-    I18n.l date, format: "%d/%m/%Y %a, %H:%M" if date
+    I18n.l date, format: "%d/%m/%Y %H:%M" if date
+  end
+
+  def localize_date_only_date(date)
+    I18n.l date, format: "%d/%m/%Y" if date
   end
 
   def duration_to_s(total_seconds)

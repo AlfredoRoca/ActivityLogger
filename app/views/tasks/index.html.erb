@@ -1,6 +1,7 @@
 <h1><%= t :Listing_tasks %></h1>
+<%= link_to 'New Task', new_task_path, class: "btn btn-default btn-lg" %>
 
-<table>
+<table class="table table-stripped table-condensed">
   <thead>
     <tr>
       <th>Name</th>
@@ -22,6 +23,4 @@
   </tbody>
 </table>
 
-<br>
-
-<%= link_to 'New Task', new_task_path %>
+<p><%= paginate @tasks %></p>

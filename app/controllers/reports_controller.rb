@@ -26,20 +26,20 @@ class ReportsController < ApplicationController
 
   def new_week_report
 
+    @start = params[:start]
+    @ended = params[:ended]
+
     @activities = Activity.joins(:project).select('projects.name').where("start >= to_timestamp('#{params[:start]}', 'DD/MM/YYYY') - interval '#{offset_utc} hours'").where("start <= to_timestamp('#{params[:ended]} 23:59:59', 'DD/MM/YYYY HH24:MI:SS') - interval '#{offset_utc} hours'").group(:name).sum(:duration)
 
     @number_of_entries = Activity.where("start >= to_timestamp('#{params[:start]}', 'DD/MM/YYYY') - interval '#{offset_utc} hours'").where("start <= to_timestamp('#{params[:ended]} 23:59:59','DD/MM/YYYY HH24:MI:SS') - interval '#{offset_utc} hours'").count
 
     @total_duration = Activity.where("start >= to_timestamp('#{params[:start]}', 'DD/MM/YYYY') - interval '#{offset_utc} hours'").where("start <= to_timestamp('#{params[:ended]} 23:59:59', 'DD/MM/YYYY HH24:MI:SS') - interval '#{offset_utc} hours'").sum('duration')
 
-    @week = params[:weekpicker]
+    @week = params[:week]
     # respond_to do |format|
     #   format.html { }
     #   format.js {}
     # end
-    
-
-    # render text: @activities
 
   end
 
