@@ -19,7 +19,8 @@
 
   <tbody>
     <% @parsed_lines.each do |line| %>
-      <% klass = line[:invalid] && line[:invalid] ? "invalid-line" : "" %>
+      <% klass = line[:must_check] ? "check-this-line" : "" %>
+      <% klass = "invalid-line" if line[:invalid] %>
 
       <tr class=<%= klass %>>
         <td><%= line[:line_num] if line[:line_num] %></td>

@@ -100,3 +100,5 @@ gem 'bootstrap3-datetimepicker-rails', '~> 4.7.14'
 
 # Airbrussh is a replacement log formatter for SSHKit that makes your Capistrano output much easier on the eyes
 gem "airbrussh", :require => false
+
+gem 'carrierwave'

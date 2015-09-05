@@ -1,0 +1,4 @@
+total 25094
+-rwxrwxrwx 1 alfredo alfredo 15891984 jul 21 16:58 development.log
+drwxrwxrwx 1 alfredo alfredo        0 jul 24 10:04 kk
+-rwxrwxrwx 1 alfredo alfredo  9802881 may 26 17:21 test.log
