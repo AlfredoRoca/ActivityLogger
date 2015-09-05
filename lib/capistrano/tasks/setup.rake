@@ -1,6 +1,6 @@
 namespace :setup do
 
-  desc "Upload sensitive files."
+  desc "Upload sensitive data files."
   task :upload_sensitive_files do
     on roles(:app) do
       execute "mkdir -p #{shared_path}/config"

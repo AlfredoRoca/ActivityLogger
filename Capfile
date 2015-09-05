@@ -22,5 +22,7 @@ require 'capistrano/rvm'
 # require 'capistrano/rails/migrations'
 # require 'rvm1/capistrano3'
 
+require "airbrussh/capistrano"
+
 # Load custom tasks from `lib/capistrano/tasks' if you have any defined
 Dir.glob('lib/capistrano/tasks/*.rake').each { |r| import r }
