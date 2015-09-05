@@ -50,8 +50,7 @@ class Activity < ActiveRecord::Base
   # Expected hash
   # line = { "line_num": counter, "proj": proj, "task": task, "subtask": subtask, "start": start, "ended": ended, "duration": duration, "invalid": true, 
   #     "objects": line_objects })
-  def self.execute_import(uid)
-    parsed_lines = self.read_activity_file
+  def self.execute_import(uid, parsed_lines)
     result = []
     counter = 0
     parsed_lines.each do |line|
@@ -72,20 +71,11 @@ class Activity < ActiveRecord::Base
   # PARSE TEXT FILE WITH ACTIVITY LINES
   # 
   def self.read_activity_file(filename)
-    file = Rails.root.join('public', 'uploads', filename)
-    if File.exists?(file)
-      parsed_lines = []
-      counter = 0
-      File.open(filename, "r+") do |f|
-        f.each_line do |line| 
-          counter += 1
-          parsed_lines << self.parse_file_line(line, counter) unless line.start_with?"#","\n"
-        end
-      end
-      parsed_lines.flatten!
-    else
-      return "ERROR: " + file.to_s + " not found"
+    parsed_lines = []
+    File.foreach(filename.path).with_index do |line, index|
+      parsed_lines << self.parse_file_line(line, index) unless line.start_with?"#","\n"
     end
+    parsed_lines.flatten!
   end
 
   private

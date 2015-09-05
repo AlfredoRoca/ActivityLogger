@@ -2,23 +2,15 @@ class ActivitiesController < ApplicationController
   before_action :set_activity, only: [:show, :edit, :update, :destroy]
 
   def upload_activities_file
-    binding.pry
-    filename = params[:import_file_name]
-    uploader = ImportUploader.new
-    uploader.store!(filename)
-    render text: filename
-
-    # @parsed_lines = Activity.read_activity_file(filename)
-    # # render json: @parsed_lines
-    # if @parsed_lines.class.to_s == 'String'
-    #   render text: @parsed_lines
-    # else
-    #   render 'check_import_file'
-    # end
+    @filename = params[:import_file_name]
+    @parsed_lines = Activity.read_activity_file(@filename)
+    render 'check_import_file'
   end
 
   def execute_import
-    result = Activity.execute_import(current_user.id)
+    filename = params[:import_file_name]
+    @parsed_lines = Activity.read_activity_file(filename)
+    result = Activity.execute_import(current_user.id, @parsed_lines)
     # render text: result
     redirect_to activities_url, notice: "#{result} activities were created."
   end

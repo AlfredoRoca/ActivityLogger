@@ -1,1 +1,1 @@
-User.create name: "SuperAdmin", email: "superadmin", admin: true, password: "123123123", password_confirmation: "123123123"
+User.create name: "Admin", email: "admin", admin: true, password: "123123123", password_confirmation: "123123123"

@@ -39,5 +39,6 @@
 </table>
 
 <%= form_tag execute_import_path do -%>
+  <%= hidden_field_tag :import_file_name, @filename %>
   <%= submit_tag "Execute import", class: "btn btn-default btn-lg" %>
 <% end -%>
