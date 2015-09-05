@@ -9,7 +9,7 @@ namespace :logs do
   desc "tail thin log" 
   task :tail_thin do
     on roles(:app) do
-      execute "tail -f /var/www/log/al_thin.log"
+      execute "/usr/bin/tail -f /var/www/log/al_thin.log"
     end
   end
 end
