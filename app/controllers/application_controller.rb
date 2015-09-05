@@ -4,8 +4,12 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 	skip_before_action :verify_authenticity_token, if: :json_request?
 
-	before_filter :require_login
+	before_filter :require_login, except: :version
 	helper_method :require_admin, :offset_utc
+
+  def version
+    render 'layoutas/revision'
+  end
 	
 private
 	def not_authenticated
