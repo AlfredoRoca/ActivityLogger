@@ -16,7 +16,7 @@ namespace :deploy do
       on roles(:app) do
         server = "#{fetch(:rails_env)}"
         if server == "staging"
-          execute "~/.rvm/wrappers/default/thin #{command} -C /etc/thin/activity_logger.yml"
+          execute "sudo /home/deployer/.rvm/wrappers/default/thin #{command} -C /etc/thin/activity_logger.yml"
         else # == "production"
           execute "/home/deployer/.rvm/wrappers/ruby-2.2.0@activity_logger/thin #{command} -C /etc/thin/activity_logger.yml"
         end
