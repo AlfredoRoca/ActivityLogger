@@ -8,7 +8,7 @@ class ApplicationController < ActionController::Base
 	helper_method :require_admin, :offset_utc
 
   def version
-    render 'layoutas/revision'
+    render 'layouts/revision'
   end
 	
 private
