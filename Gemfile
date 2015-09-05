@@ -44,6 +44,7 @@ gem 'bcrypt', '~> 3.1.7'
 gem 'sorcery'
 
 # A fast and very simple Ruby web server
+gem 'eventmachine', '1.0.7' # to match gloabl gemset at shk-1
 gem 'thin' 
 
 # gem 'rails_12factor', group: :production
