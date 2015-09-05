@@ -1,9 +1,15 @@
 class ActivitiesController < ApplicationController
   before_action :set_activity, only: [:show, :edit, :update, :destroy]
 
-  def check_import_file
-    @parsed_lines = Activity.read_activity_file
+  def upload_activities_file
+    filename = params[:import_file_name]
+    @parsed_lines = Activity.read_activity_file(filename)
     # render json: @parsed_lines
+    if @parsed_lines.class.to_s == 'String'
+      render text: @parsed_lines
+    else
+      render 'check_import_file'
+    end
   end
 
   def execute_import

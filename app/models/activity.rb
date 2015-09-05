@@ -36,8 +36,6 @@ class Activity < ActiveRecord::Base
 
   before_save :calc_duration
 
-  ACTIVITY_IMPORT_FILE = "tmp/tareas.txt"
-
   def calc_duration
     # binding.pry
   	if self.ended && self.start
@@ -73,11 +71,12 @@ class Activity < ActiveRecord::Base
 
   # PARSE TEXT FILE WITH ACTIVITY LINES
   # 
-  def self.read_activity_file
-    if File.exists?(ACTIVITY_IMPORT_FILE)
+  def self.read_activity_file(filename)
+    file = Rails.root.join('public', 'uploads', filename)
+    if File.exists?(file)
       parsed_lines = []
       counter = 0
-      File.open(ACTIVITY_IMPORT_FILE, "r+") do |f|
+      File.open(filename, "r+") do |f|
         f.each_line do |line| 
           counter += 1
           parsed_lines << self.parse_file_line(line, counter) unless line.start_with?"#","\n"
@@ -85,7 +84,7 @@ class Activity < ActiveRecord::Base
       end
       parsed_lines.flatten!
     else
-      return ACTIVITY_IMPORT_FILE + " not found"
+      return "ERROR: " + file.to_s + " not found"
     end
   end
 
@@ -117,18 +116,28 @@ begin
     periods = elements.drop(2)
     periods = periods.drop_while{|p| p.to_i == 0}
     periods.each do |period|
+      must_check = false
       times = period.split('-')
       on = times[0]
+      if on.blank?
+        on = '23:59' 
+        must_check = true
+      end
       on += ':00' unless on.include?':'
       start_date = date + ' ' + on
       off = times[1]
+      if off.blank?
+        off = '23:59' 
+        must_check = true
+      end
       off += ':00' unless off.include?(':')
       ended_date = date + ' ' + off
-      start = DateTime.strptime(start_date + ' ' + on, "%d/%m/%Y %H:%M")
-      ended = DateTime.strptime(ended_date + ' ' + off, "%d/%m/%Y %H:%M")
-      ended += 1 if start > ended
-      duration = ApplicationController.helpers.duration_to_s(((ended - start)*24*60*60).to_i)
-      result << self.parse_activity_line(counter, proj, task, subtask, start, ended, duration)
+      start = Time.zone.parse(start_date)
+      ended = Time.zone.parse(ended_date)
+      ended += 1.day if start > ended
+      duration = ApplicationController.helpers.duration_to_s((ended - start).to_i)
+      must_check = must_check || (ended - start) >= 10.hours
+      result << self.parse_activity_line(counter, proj, task, subtask, start, ended, duration, must_check)
     end
     return result
   rescue => error
@@ -139,8 +148,8 @@ begin
     
   end
 
-  def self.parse_activity_line(counter, proj, task, subtask, start, ended, duration)
-    line = { "line_num": counter, "proj": proj, "task": task, "subtask": subtask, "start": start, "ended": ended, "duration": duration }
+  def self.parse_activity_line(counter, proj, task, subtask, start, ended, duration, must_check)
+    line = { "line_num": counter, "proj": proj, "task": task, "subtask": subtask, "start": start, "ended": ended, "duration": duration, "must_check": must_check }
     line_objects = self.get_line_objects(line)
     line.merge!({ "invalid": self.line_invalid?(line_objects) })
     line.merge!({ "objects": line_objects })

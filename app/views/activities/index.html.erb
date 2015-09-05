@@ -1,6 +1,12 @@
 <h1><%= t :Listing_activities %></h1>
 <%= link_to 'New Activity', new_activity_path, class: "btn btn-default btn-lg" %>
-<%= link_to 'Import activities from file', check_import_file_path, class: "btn btn-default btn-lg" %>
+
+<%= form_tag(upload_activities_file_path, {:class => "form"}) do %>
+  <%= file_field_tag :import_file_name %>
+  <%= hidden_field_tag :import_file_name_cache %>
+  <%= submit_tag "Upload and parse", class: "btn btn-default btn-lg"  %>
+<% end -%>
+
 
 <table class="table table-stripped table-condensed">
   <thead>
