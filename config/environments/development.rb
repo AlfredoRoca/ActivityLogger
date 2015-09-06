@@ -43,7 +43,6 @@ Rails.application.configure do
     Bullet.console = true
     Bullet.rails_logger = true
     Bullet.add_footer = true
-    # Bullet.add_whitelist :type => :unused_eager_loading, :class_name => "AreaCompany", :association => :area
   end
 
 end
