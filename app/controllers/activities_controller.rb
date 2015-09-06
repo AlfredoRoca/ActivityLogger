@@ -2,16 +2,18 @@ class ActivitiesController < ApplicationController
   before_action :set_activity, only: [:show, :edit, :update, :destroy]
 
   def upload_activities_file
-    @filename = params[:import_file_name]
-    @parsed_lines = Activity.read_activity_file(@filename)
+    filename = params[:import_file_name]
+    @original_filename = filename.original_filename
+    @parsed_lines = Activity.read_activity_file(filename)
+    @total_lines = @parsed_lines.count
+    @must_check = @parsed_lines.count{|l| l[:must_check] == true}
+    @invalid = @parsed_lines.count{|l| l[:invalid] == true}
     render 'check_import_file'
   end
 
   def execute_import
-    filename = params[:import_file_name]
-    @parsed_lines = Activity.read_activity_file(filename)
-    result = Activity.execute_import(current_user.id, @parsed_lines)
-    # render text: result
+    original_filename = params[:original_filename]
+    result = Activity.execute_import(current_user.id, original_filename)
     redirect_to activities_url, notice: "#{result} activities were created."
   end
 

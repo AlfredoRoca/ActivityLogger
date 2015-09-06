@@ -45,12 +45,28 @@ class Activity < ActiveRecord::Base
   	end
   end
 
+  # PARSE TEXT FILE WITH ACTIVITY LINES
+  # 
+  def self.read_activity_file(filename)
+    parsed_lines = []
+    File.foreach(filename.path).with_index do |line, index|
+      parsed_lines << self.parse_file_line(line, index) unless line.start_with?"#","\n"
+    end
+    save_upload(filename)
+    parsed_lines.flatten!
+  end
+
   # EXECUTE IMPORT
   # 
   # Expected hash
   # line = { "line_num": counter, "proj": proj, "task": task, "subtask": subtask, "start": start, "ended": ended, "duration": duration, "invalid": true, 
   #     "objects": line_objects })
-  def self.execute_import(uid, parsed_lines)
+  def self.execute_import(uid, original_filename)
+    parsed_lines = []
+    File.foreach(Rails.root.join('public', 'uploads', original_filename)).with_index do |line, index|
+      parsed_lines << self.parse_file_line(line, index) unless line.start_with?"#","\n"
+    end
+    parsed_lines.flatten!
     result = []
     counter = 0
     parsed_lines.each do |line|
@@ -68,17 +84,13 @@ class Activity < ActiveRecord::Base
     counter
   end
 
-  # PARSE TEXT FILE WITH ACTIVITY LINES
-  # 
-  def self.read_activity_file(filename)
-    parsed_lines = []
-    File.foreach(filename.path).with_index do |line, index|
-      parsed_lines << self.parse_file_line(line, index) unless line.start_with?"#","\n"
-    end
-    parsed_lines.flatten!
-  end
-
   private
+
+    def self.save_upload(uploaded_io)
+      File.open(Rails.root.join('public', 'uploads', uploaded_io.original_filename), 'wb') do |file|
+        file.write(uploaded_io.read)
+      end
+    end
 
   # TODO extract subtasks and add to subtasks table if new
   # # sintaxis
@@ -101,10 +113,10 @@ begin
     # TODO if date comes with 2-digit year, change to 4-digit
     date << "/" << Date.today.year.to_s if date.length < 6
     proj = elements[1]
-    task = (elements[2] if elements[2].to_i == 0) || default_task
-    subtask = elements[3] if elements[3].to_i == 0
+    task = (elements[2] if elements[2] =~ /^[A-za-z]/) || default_task
+    subtask = elements[3] if elements[3] =~ /^[A-za-z]/
     periods = elements.drop(2)
-    periods = periods.drop_while{|p| p.to_i == 0}
+    periods = periods.drop_while{|p| p =~ /^[A-za-z]/}
     periods.each do |period|
       must_check = false
       times = period.split('-')
@@ -148,13 +160,18 @@ begin
   def self.get_line_objects(line)
     proj = Project.where("lower(name) = lower('" + line[:proj] + "') or lower(alias) = lower('" + line[:proj] + "')").first
     task = Task.where("lower(name) = lower('" + line[:task] + "') or lower(code) = lower('" + line[:task] + "')").first
-    subtask = Subtask.where("lower(name) = ('" + line[:subtask] + "') or lower(code) = lower('" + line[:subtask] + "')").first if line[:subtask]
-    subtask ||= nil
-    {"proj": proj, "task": task, "subtask": (subtask ? subtask.id : "")}
+    objects = {"proj": proj, "task": task}
+    if line.include?(:subtask) && !line[:subtask].nil?
+      subtask =  Subtask.where("lower(name) = ('" + line[:subtask] + "') or lower(code) = lower('" + line[:subtask] + "')").first
+      objects.merge!({"subtask": subtask}) unless line[:subtask].nil?
+    else
+      subtask = nil
+    end
+    objects
   end
 
   def self.line_invalid?(line_objects)
-    line_objects[:proj].nil? || line_objects[:task].nil? 
+    line_objects[:proj].nil? || line_objects[:task].nil? || (line_objects.include?(:subtask) && line_objects[:subtask].nil?)
   end
 
 end

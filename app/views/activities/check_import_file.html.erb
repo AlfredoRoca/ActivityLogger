@@ -1,6 +1,13 @@
 <h1>Import checking</h1>
 <%= link_to 'Back', :back, class: "btn btn-default btn-lg" %>
 
+<% klass_invalid = @invalid > 0 ? "invalid-line" : "" %>
+<% klass_mustchk = @must_check > 0 ? "check-this-line" : "" %>
+<h3><%= "Total lines: #{@total_lines} ::" %>
+<span class=<%= klass_invalid %>><%= "#{@invalid} invalid (red) lines" %></span> -
+<span class=<%= klass_mustchk %>><%= "#{@must_check} must check (yellow) lines" %></span>
+</h3>
+
 <table class="table table-stripped table-condensed">
   <thead>
     <tr>
@@ -39,6 +46,6 @@
 </table>
 
 <%= form_tag execute_import_path do -%>
-  <%= hidden_field_tag :import_file_name, @filename %>
+  <%= hidden_field_tag :original_filename, @original_filename %>
   <%= submit_tag "Execute import", class: "btn btn-default btn-lg" %>
 <% end -%>
