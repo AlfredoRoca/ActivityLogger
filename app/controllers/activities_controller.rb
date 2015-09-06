@@ -21,7 +21,7 @@ class ActivitiesController < ApplicationController
   # GET /activities.json
   def index
     if current_user.admin
-      @activities = Activity.all.ordered_last_first.page params[:page]
+      @activities = Activity.all.includes(:project, :task, :subtask, :user).ordered_last_first.page params[:page]
     else
       @activities = Activity.for_user(current_user.id).ordered_last_first.page params[:page]
     end
