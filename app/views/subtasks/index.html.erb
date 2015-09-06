@@ -16,7 +16,7 @@
       <tr>
         <td><%= subtask.name %></td>
         <td><%= subtask.code %></td>
-        <td><%= subtask.task %></td>
+        <td><%= subtask.task.name if subtask.task %></td>
         <td><%= link_to 'Show', subtask %></td>
         <td><%= link_to 'Edit', edit_subtask_path(subtask) %></td>
         <td><%= link_to 'Destroy', subtask, method: :delete, data: { confirm: 'Are you sure?' } if current_user && current_user.admin? %></td>
