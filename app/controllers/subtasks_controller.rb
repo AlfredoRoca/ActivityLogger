@@ -5,7 +5,7 @@ class SubtasksController < ApplicationController
   # GET /subtasks
   # GET /subtasks.json
   def index
-    @subtasks = Subtask.all.page params[:page]
+    @subtasks = Subtask.all.includes(:task).page params[:page]
   end
 
   # GET /subtasks/1
