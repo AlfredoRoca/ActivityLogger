@@ -1,0 +1,35 @@
+<h1>Month report</h1>
+
+<% @activities.size.times{ |mon| %>
+  <h3><%= "#{@month[mon]} > #{@start[mon]}-#{@ended[mon]}" %> </h3>
+  <% unless @activities[mon].empty? %>
+    <table class="table table-condensed">
+      <thead>
+        <tr>
+          <th>Project</th>
+          <th>Duration</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @activities[mon].each do |a| %>
+          <tr>
+            <td>
+              <%= a[0] %>
+            </td>
+            <td>
+              <%= duration_to_s(a[1]) %></li>  
+            </td>
+          </tr>
+        <% end %>
+        <tr>
+          <td>
+            <h3><%= @activities[mon].count %> projects / <%= @number_of_entries[mon] %> lines</h3>
+          </td>
+          <td>
+            <h3><%= duration_to_s(@total_duration[mon]) %></h3>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  <% end %>
+<% } -%>
