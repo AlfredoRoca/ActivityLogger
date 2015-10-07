@@ -11,32 +11,15 @@
   <ul>
     
     <% @project.tasks.each do |t| %>
-
-      <li><%= t.name %></li>
-
-        <ul>
-          <% t.users.each do |u| %>
-            <li><%= u.name %></li>
-
-              <ul class="invisible">
-                <% u.activities.for_project(@project.id).for_task(t).with_end.each do |a| %>
-                  <li><%= duration_to_s(a.duration) %></li>
-                <% end %>
-              </ul>
-              Total time: <%= duration_to_s(u.activities.for_project(@project.id).for_task(t).with_end.sum(:duration)) %>
-
-          <% end %>
-        </ul>
-
-        Total task time: <%= duration_to_s(t.activities.for_project(@project.id).with_end.sum(:duration)) %>
-
+      <li>
+        <%= t.name %> <%= duration_to_s(t.activities.for_project(@project.id).with_end.sum(:duration)) %>
+      </li>
     <% end %>
 
   </ul>
 
 
   <h3>Users</h3>
-
 
   <ul>
     
@@ -46,17 +29,16 @@
 
         <ul>
           <% u.tasks.each do |t| %>
-            <li><%= t.name %></li>
-              <ul class="invisible">
-                <% t.activities.for_project(@project.id).for_user(u).with_end.each do |a| %>
-                  <li><%= duration_to_s(a.duration) %> </li>
-                <% end %>
-              </ul>
-              Total task time: <%= duration_to_s(t.activities.for_project(@project.id).for_user(u).with_end.sum(:duration)) %>
+              <% sum_duration = (t.activities.for_project(@project.id).for_user(u).with_end.sum(:duration)) %>
+              <% if sum_duration > 0 %>
+                <li>
+                  <%= t.name %> <%= duration_to_s(sum_duration) %>
+                </li>
+              <% end -%>
           <% end %>
         </ul>
         
-        Total user time: <%= duration_to_s(u.activities.for_project(@project.id).with_end.sum(:duration)) %>
+        <label>Total user time: <%= duration_to_s(u.activities.for_project(@project.id).with_end.sum(:duration)) %></label>
 
     <% end %>
 

@@ -40,16 +40,23 @@ class ReportPdf < Prawn::Document
 
   def project_tasks_table_content
     text "Tasks", size: @font_big
-    # This makes a call to product_rows and gets back an array of data that will populate the columns and rows of a table
-    # I then included some styling to include a header and make its text bold. I made the row background colors alternate between grey and white
-    # Then I set the table column widths
-    # table(project_tasks_rows) do
-    #   row(0).font_style = :bold
-    #   self.header = true
-    #   self.row_colors = ['DDDDDD', 'FFFFFF']
-    #   self.column_widths = [40, 300, 200]
-    # end
-    # table(["qwe", "asd", "zxc"])
+    @project.tasks.each do |t|
+      text "#{t.name} #{duration_to_s(t.activities.for_project(@project.id).with_end.sum(:duration))}"
+    end
+    move_down 20
+    text "Users", size: @font_big
+    @project.users.each do |u|
+      text "#{u.name} #{duration_to_s(u.activities.for_project(@project.id).with_end.sum(:duration))}"
+      u.tasks.each do |t|
+        sum_duration = (t.activities.for_project(@project.id).for_user(u).with_end.sum(:duration))
+        text " - #{t.name} #{duration_to_s(sum_duration)}" if sum_duration > 0
+      end
+      move_down 20
+    end
+
+    move_down 20
+    text "Total project time: #{duration_to_s(@project.activities.with_end.sum(:duration))}", size: @font_big
+    # 
   end
 
   def project_tasks_rows

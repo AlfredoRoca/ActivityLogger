@@ -1,0 +1,71 @@
+<h1>Project report </h1>
+<h2><%= @project.name %></h2>
+
+<% unless @project.users.empty? %>
+
+  <p>Start: <%= localize_date @project.activities.first.start %></p>
+  <p>Last activity: <%= localize_date @project.activities.last.ended %></p>
+
+  <h3>Tasks</h3>
+
+  <ul>
+    
+    <% @project.tasks.each do |t| %>
+
+      <li><%= t.name %></li>
+
+        <ul>
+          <% t.users.each do |u| %>
+            <li><%= u.name %></li>
+
+              <ul class="invisible">
+                <% u.activities.for_project(@project.id).for_task(t).with_end.each do |a| %>
+                  <li><%= duration_to_s(a.duration) %></li>
+                <% end %>
+              </ul>
+              Total time: <%= duration_to_s(u.activities.for_project(@project.id).for_task(t).with_end.sum(:duration)) %>
+
+          <% end %>
+        </ul>
+
+        Total task time: <%= duration_to_s(t.activities.for_project(@project.id).with_end.sum(:duration)) %>
+
+    <% end %>
+
+  </ul>
+
+
+  <h3>Users</h3>
+
+
+  <ul>
+    
+    <% @project.users.each do |u| %>
+
+      <li><%= u.name %></li>
+
+        <ul>
+          <% u.tasks.each do |t| %>
+            <li><%= t.name %></li>
+              <ul class="invisible">
+                <% t.activities.for_project(@project.id).for_user(u).with_end.each do |a| %>
+                  <li><%= duration_to_s(a.duration) %> </li>
+                <% end %>
+              </ul>
+              Total task time: <%= duration_to_s(t.activities.for_project(@project.id).for_user(u).with_end.sum(:duration)) %>
+          <% end %>
+        </ul>
+        
+        Total user time: <%= duration_to_s(u.activities.for_project(@project.id).with_end.sum(:duration)) %>
+
+    <% end %>
+
+  </ul>
+
+  <h3>Total project time: <%= duration_to_s(@project.activities.with_end.sum(:duration)) %></h3>
+
+<% else %>
+
+  <h3>No activity</h3>
+  
+<% end %>
