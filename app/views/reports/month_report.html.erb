@@ -33,3 +33,19 @@
     </table>
   <% end %>
 <% } -%>
+
+
+    <table class="table table-condensed">
+      <thead>
+        <tr>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><h2>Total year</h2></td>
+          <td>
+          <h2 class="pull-right"><%= duration_to_s(@total_duration.reduce :+) %></h2>
+          </td>
+        </tr>
+      </tbody>
+    </table>
