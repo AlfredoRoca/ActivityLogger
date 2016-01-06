@@ -36,7 +36,7 @@ class ReportsController < ApplicationController
     absolute_starting_date = first_activity - (first_activity.day - 1).days
     absolute_ending_date = DateTime.now
 
-    begin
+    while absolute_starting_date <= absolute_ending_date
       month = absolute_starting_date.month
       year = absolute_starting_date.year
 
@@ -55,7 +55,7 @@ class ReportsController < ApplicationController
 
       absolute_starting_date += 1.month
 
-    end until absolute_starting_date > absolute_ending_date
+    end 
   end
 
   def new_week_report
