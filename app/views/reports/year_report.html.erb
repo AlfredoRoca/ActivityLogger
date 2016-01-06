@@ -1,8 +1,8 @@
-<h1>Month report</h1>
+<h1>Year report</h1>
 
-<% @activities.size.times{ |mon| %>
-  <h3><%= "#{I18n.t("date.month_names")[@month_year[mon][:month]]} #{@month_year[mon][:year]}".capitalize %> </h3>
-  <% unless @activities[mon].empty? %>
+<% @activities.size.times{ |year| %>
+  <h3><%= @year[year]  %> </h3>
+  <% unless @activities[year].empty? %>
     <table class="table table-condensed">
       <thead>
         <tr>
@@ -11,7 +11,7 @@
         </tr>
       </thead>
       <tbody>
-        <% @activities[mon].each do |a| %>
+        <% @activities[year].each do |a| %>
           <tr>
             <td>
               <%= a[0] %>
@@ -23,10 +23,10 @@
         <% end %>
         <tr>
           <td>
-            <h3><%= @activities[mon].count %> projects / <%= @number_of_entries[mon] %> lines</h3>
+            <h3><%= @activities[year].count %> projects / <%= @number_of_entries[year] %> lines</h3>
           </td>
           <td>
-            <h3><%= duration_to_s(@total_duration[mon]) %></h3>
+            <h3><%= duration_to_s(@total_duration[year]) %></h3>
           </td>
         </tr>
       </tbody>

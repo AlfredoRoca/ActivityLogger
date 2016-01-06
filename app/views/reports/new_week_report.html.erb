@@ -1,7 +1,9 @@
 <h1>Week report</h1>
 <h3>Semana <%= @week %>: <%= @start %> - <%= @ended %></h3>
 
-<% unless @activities.empty? %>
+<% if @activities.empty? %>
+  No activity this week
+<% else %>
   <table class="table table-condensed">
     <thead>
       <tr>

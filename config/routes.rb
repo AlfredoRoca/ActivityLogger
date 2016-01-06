@@ -83,6 +83,7 @@ Rails.application.routes.draw do  resources :users
   get 'user_report/:user_id'        => 'reports#user_report',     as: 'user_report'
   get 'week_report'                 => 'reports#week_report',     as: 'week_report'
   get 'month_report'                => 'reports#month_report',    as: 'month_report'
+  get 'year_report'                 => 'reports#year_report',     as: 'year_report'
   post 'new_week_report'            => 'reports#new_week_report', as: 'new_week_report'
 
   get '/version'                    => 'application#version'

@@ -27,32 +27,46 @@ class ReportsController < ApplicationController
   def month_report
     @start = []
     @ended = []
-    @month = []
+    @month_year = []
     @activities = []
     @number_of_entries = []
     @total_duration = []
 
-    Date.today.month.times{ |mon| 
-      s = Date.strptime("1/#{mon+1}", "%d/%m").strftime("%d/%m/%Y")
-      @start << s
-      e = (Date.parse(s) + 1.month - 1.day).strftime("%d/%m/%Y")
-      @ended << e
-      @month << Date.parse(s).strftime("%B")
-      @activities << Activity.includes(:project).select('projects.name').where("start >= to_timestamp('#{s}', 'DD/MM/YYYY') - interval '#{offset_utc} hours'").where("start <= to_timestamp('#{e} 23:59:59', 'DD/MM/YYYY HH24:MI:SS') - interval '#{offset_utc} hours'").group(:name).sum(:duration)
-      @number_of_entries << Activity.where("start >= to_timestamp('#{s}', 'DD/MM/YYYY') - interval '#{offset_utc} hours'").where("start <= to_timestamp('#{e} 23:59:59','DD/MM/YYYY HH24:MI:SS') - interval '#{offset_utc} hours'").count
-      @total_duration << Activity.where("start >= to_timestamp('#{s}', 'DD/MM/YYYY') - interval '#{offset_utc} hours'").where("start <= to_timestamp('#{e} 23:59:59', 'DD/MM/YYYY HH24:MI:SS') - interval '#{offset_utc} hours'").sum('duration')
-    } 
+    first_activity = Activity.first.start
+    absolute_starting_date = first_activity - (first_activity.day - 1).days
+    absolute_ending_date = DateTime.now
+
+    begin
+      month = absolute_starting_date.month
+      year = absolute_starting_date.year
+
+      start = DateTime.new(year, month, 1)
+      ended = start + 1.month - 1.day
+      @start << start
+      @ended << ended
+      @month_year << {month: month, year: year}
+
+      starting_date = start
+      ending_date = ended + 1.day
+      
+      @activities << Activity.includes(:project).where(start: starting_date .. ending_date).group(:name).sum(:duration)
+      @number_of_entries << Activity.where(start: starting_date .. ending_date).count
+      @total_duration << Activity.where(start: starting_date .. ending_date).sum(:duration)
+
+      absolute_starting_date += 1.month
+
+    end until absolute_starting_date > absolute_ending_date
   end
 
   def new_week_report
     @start = params[:start]
     @ended = params[:ended]
+    starting_date = DateTime.parse(@start)
+    ending_date = DateTime.parse(@ended) + 1.day
 
-    @activities = Activity.includes(:project).select('projects.name').where("start >= to_timestamp('#{params[:start]}', 'DD/MM/YYYY') - interval '#{offset_utc} hours'").where("start <= to_timestamp('#{params[:ended]} 23:59:59', 'DD/MM/YYYY HH24:MI:SS') - interval '#{offset_utc} hours'").group(:name).sum(:duration)
-
-    @number_of_entries = Activity.where("start >= to_timestamp('#{params[:start]}', 'DD/MM/YYYY') - interval '#{offset_utc} hours'").where("start <= to_timestamp('#{params[:ended]} 23:59:59','DD/MM/YYYY HH24:MI:SS') - interval '#{offset_utc} hours'").count
-
-    @total_duration = Activity.where("start >= to_timestamp('#{params[:start]}', 'DD/MM/YYYY') - interval '#{offset_utc} hours'").where("start <= to_timestamp('#{params[:ended]} 23:59:59', 'DD/MM/YYYY HH24:MI:SS') - interval '#{offset_utc} hours'").sum('duration')
+    @activities = Activity.includes(:project).where(start: starting_date .. ending_date).group(:name).sum(:duration)
+    @number_of_entries = Activity.where(start: starting_date .. ending_date).count
+    @total_duration = Activity.where(start: starting_date .. ending_date).sum(:duration)
 
     @week = params[:week]
     # respond_to do |format|
@@ -60,6 +74,38 @@ class ReportsController < ApplicationController
     #   format.js {}
     # end
 
+  end
+
+  def year_report
+    @start = []
+    @ended = []
+    @year = []
+    @activities = []
+    @number_of_entries = []
+    @total_duration = []
+
+    first_activity = Activity.first.start
+    absolute_starting_date = first_activity - (first_activity.day - 1).days
+    absolute_ending_date = DateTime.now
+
+    begin
+      year = absolute_starting_date.year
+
+      start = DateTime.new(year, 1, 1)
+      ended = start + 1.year - 1.day
+      @start << start
+      @ended << ended
+      @year << year
+
+      starting_date = start
+      ending_date = ended + 1.day
+      
+      @activities << Activity.includes(:project).where(start: starting_date .. ending_date).group(:name).sum(:duration)
+      @number_of_entries << Activity.where(start: starting_date .. ending_date).count
+      @total_duration << Activity.where(start: starting_date .. ending_date).sum(:duration)
+      absolute_starting_date += 1.year
+
+    end until absolute_starting_date > absolute_ending_date
   end
 
 

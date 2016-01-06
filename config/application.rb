@@ -65,5 +65,10 @@ module ActivityLogger
     # 
     REVISION = File.read('REVISION')
 
+    config.console do
+      require 'pry'
+      config.console = Pry
+    end
+
   end
 end
