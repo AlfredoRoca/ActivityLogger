@@ -7,6 +7,8 @@ class ApplicationController < ActionController::Base
 	before_filter :require_login, except: :version
 	helper_method :require_admin, :offset_utc
 
+  include ActionView::Helpers::DateHelper
+
   def version
     render 'layouts/revision'
   end
