@@ -2,13 +2,13 @@ source 'https://rubygems.org'
 ruby "2.2.0"
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.2.0'
+gem 'rails', '4.2.6'
 # respond_to feature from rails 4.2
-gem 'responders', '~> 2.0'
+gem 'responders', '~> 2.1.0'
 # Use postgresql as the database for Active Record
-gem 'pg', '~> 0.18.1' 
+gem 'pg', '~> 0.18.3' 
 # Use SCSS for stylesheets
-gem 'bootstrap-sass', '~> 3.3.4'
+gem 'bootstrap-sass', '~> 3.3.5'
 gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
@@ -26,7 +26,7 @@ gem 'turbolinks'
 gem 'jquery-turbolinks'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem 'jbuilder', '~> 2.0'
+gem 'jbuilder', '~> 2.3'
 # bundle exec rake doc:rails generates the API under doc/api.
 # gem 'sdoc', '~> 0.4.0',          group: :doc
 
@@ -44,7 +44,7 @@ gem 'bcrypt', '~> 3.1.7'
 gem 'sorcery'
 
 # A fast and very simple Ruby web server
-gem 'eventmachine', '1.0.7' # to match gloabl gemset at shk-1
+gem 'eventmachine', '1.0.7'
 gem 'thin' 
 
 # gem 'rails_12factor', group: :production
@@ -82,7 +82,7 @@ gem 'pry'
 gem 'pry-rails'
 group :development, :test do
   gem 'pry-byebug'
-  gem 'rspec-rails', '~> 3.1.0'
+  gem 'rspec-rails'
   gem 'factory_girl_rails'
   gem 'faker'
   gem 'spring'
