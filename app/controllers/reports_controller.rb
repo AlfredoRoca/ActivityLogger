@@ -118,6 +118,7 @@ class ReportsController < ApplicationController
       @project_starting_date = @activities.first.start
       @project_ending_date = (@activities.last.try(:ended) || @activities.last.start) + 1.day
       @project_age = distance_of_time_in_words(@project_starting_date, @project_ending_date)
+      @project_age_until_now = distance_of_time_in_words_to_now(@project_starting_date)
       
       @weekly_duration = @activities.order(:year, :week).group(:year, :week).sum(:duration)
       @weekly_entries = @activities.order(:year, :week).group(:year, :week).count
