@@ -18,6 +18,7 @@
 # DREAMHOST
 server '67.205.57.114', user: 'deployer', roles: %w{web app db}, primary: true, port: 53100
 
+set :hostname, '67.205.57.114'
 # set :deploy_to, '/home/alfredo/rails_apps/activity_logger'
 set :deploy_to, '/var/www/activity_logger/'
 set :use_sudo, false
