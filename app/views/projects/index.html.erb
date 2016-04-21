@@ -20,8 +20,9 @@
         <td><%= project.alias %></td>
         <td><%= project.closed %></td>
         <td><%= project.audits.count %></td>
-        <td><%= link_to "Report", project_report_path(project) %></td>
-        <td><%= link_to "Report PDF", project_report_path(project)+'.pdf' %></td>
+        <td><%= link_to "Activity Report", weekly_for_project_report_path(project) %></td>
+        <td><%= link_to "Summary Report", project_report_path(project) %></td>
+        <td><%= link_to "Summary Report PDF", project_report_path(project)+'.pdf' %></td>
         <td><%= link_to 'Show', project %></td>
         <td><%= link_to 'Edit', edit_project_path(project) %></td>
         <td><%= link_to 'Destroy', project, method: :delete, data: { confirm: 'Are you sure?' } if current_user && current_user.admin? %></td>

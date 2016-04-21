@@ -15,6 +15,8 @@
 #
 
 class Activity < ActiveRecord::Base
+  after_save :update_week, :update_year
+
   belongs_to :project
   belongs_to :task
   belongs_to :subtask
@@ -171,6 +173,14 @@ begin
 
   def self.line_invalid?(line_objects)
     line_objects[:proj].nil? || line_objects[:task].nil? || (line_objects.include?(:subtask) && line_objects[:subtask].nil?)
+  end
+
+  def update_week
+    update_column(:week, start.strftime("%V"))
+  end
+
+  def update_year
+    update_column(:year, start.year)
   end
 
 end

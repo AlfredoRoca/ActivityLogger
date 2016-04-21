@@ -18,7 +18,7 @@
 
   </ul>
 
-
+<% if false %>
   <h3>Users</h3>
 
   <ul>
@@ -43,6 +43,7 @@
     <% end %>
 
   </ul>
+<% end -%>
 
   <h3>Total project time: <%= duration_to_s(@project.activities.with_end.sum(:duration)) %></h3>
 

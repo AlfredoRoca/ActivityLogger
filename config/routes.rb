@@ -79,6 +79,7 @@ Rails.application.routes.draw do  resources :users
 
   get 'profile' => 'users#profile',         as: 'profile'
   
+  get 'weekly_for_project_report/:project_id'  => 'reports#weekly_for_project_report',  as: 'weekly_for_project_report'
   get 'project_report/:project_id'  => 'reports#project_report',  as: 'project_report'
   get 'user_report/:user_id'        => 'reports#user_report',     as: 'user_report'
   get 'week_report'                 => 'reports#week_report',     as: 'week_report'

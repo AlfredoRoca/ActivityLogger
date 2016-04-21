@@ -91,6 +91,6 @@ class ActivitiesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def activity_params
-      params.require(:activity).permit(:project_id, :task_id, :subtask_id, :user_id, :start, :ended, :duration, :description)
+      params.require(:activity).permit(:project_id, :task_id, :subtask_id, :user_id, :start, :ended, :duration, :description, :week, :year)
     end
 end

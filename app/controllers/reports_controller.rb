@@ -108,5 +108,34 @@ class ReportsController < ApplicationController
     end until absolute_starting_date > absolute_ending_date
   end
 
+  def weekly_for_project_report
+    @project = Project.includes(:activities, :tasks).find(params[:project_id])
+
+    @activities = @project.activities
+    @tasks = @project.tasks
+
+    @project_starting_date = @activities.first.start
+    @project_ending_date = (@activities.last.try(:ended) || @activities.last.start) + 1.day
+    
+    @weekly_duration = @activities.order(:year, :week).group(:year, :week).sum(:duration)
+    @weekly_entries = @activities.order(:year, :week).group(:year, :week).count
+
+    # weekly_activity is a hash resulting the combination of _duration and _entries
+    # => [yyyy, week]=>[entries, duration]
+    # {[2015, 1]=>[9, 58500], [2015, 6]=>[1, 11400], [2015, 9]=>[1, 12300], [2015, 10]=>[3, 33600], [2016, 1]=>[1, 64800]}
+    @weekly_activity = @weekly_entries.merge(@weekly_duration){|key,oldval,newval| [*oldval].to_a + [*newval.to_i].to_a }
+
+    @total_duration = @activities.sum(:duration)
+
+    respond_to do |format|
+      format.html
+      format.json
+      format.pdf do
+        pdf = ReportPdf.new(@project)
+        send_data pdf.render, file_name: 'report.pdf', type: 'application/pdf'
+      end
+    end
+  end
+
 
 end
