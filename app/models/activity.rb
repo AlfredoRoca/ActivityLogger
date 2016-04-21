@@ -67,7 +67,6 @@ class Activity < ActiveRecord::Base
       parsed_lines << self.parse_file_line(line, index) unless line.start_with?"#","\n"
     end
     parsed_lines.flatten!
-    result = []
     counter = 0
     parsed_lines.each do |line|
       project_id = line[:objects][:proj].id
@@ -77,7 +76,6 @@ class Activity < ActiveRecord::Base
       start = line[:start]
       ended = line[:ended]
       duration = line[:duration]
-      # result << { "proj": project_id, "task": task_id, "subtask": subtask_id, "user": user_id, "start": start, "ended": ended, "duration": duration }
       Activity.create({ project_id: project_id, task_id: task_id, subtask_id: subtask_id, user_id: user_id, start: start.getutc, ended: ended, duration: duration })
       counter += 1
     end
@@ -113,7 +111,8 @@ begin
     # TODO if date comes with 2-digit year, change to 4-digit
     date << "/" << Date.today.year.to_s if date.length < 6
     proj = elements[1]
-    task = (elements[2] if elements[2] =~ /^[A-za-z]/) || default_task
+    task = default_task
+    task = elements[2] if elements[2] =~ /^[A-za-z]/
     subtask = elements[3] if elements[3] =~ /^[A-za-z]/
     periods = elements.drop(2)
     periods = periods.drop_while{|p| p =~ /^[A-za-z]/}
