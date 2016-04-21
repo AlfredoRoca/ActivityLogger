@@ -28,8 +28,8 @@ RSpec.describe ActivitiesController, :type => :controller do
   # Activity. As you add validations to Activity, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) {
-    FactoryGirl.attributes_for(:activity)
-    # FactoryGirl.attributes_for(:activity, project_id: project.id, task_id: task.id, user_id: admin.id, start: DateTime.parse("13/2/2016"))
+    # FactoryGirl.attributes_for(:activity)
+    FactoryGirl.attributes_for(:activity, project_id: project.id, task_id: task.id, user_id: admin.id)
   }
 
   let(:valid_attributes_for_user) {
@@ -37,7 +37,7 @@ RSpec.describe ActivitiesController, :type => :controller do
   }
 
   let(:invalid_attributes) {
-    FactoryGirl.attributes_for(:activity_invalid)
+    FactoryGirl.attributes_for(:activity, project_id: nil)
   }
 
   # This should return the minimal set of values that should be in the session
@@ -94,23 +94,21 @@ RSpec.describe ActivitiesController, :type => :controller do
 
     describe "POST create" do
       describe "with valid params" do
-        before(:each) do
-          post :create, {:activity => {project_id: project.id, task_id: task.id, user_id: user.id, start: DateTime.parse("13/2/2016 13:34")}}, valid_session
-          # post :create, {:activity => valid_attributes}, valid_session
-        end
 
         it "creates a new Activity" do
-          expect{
+          expect {
             post :create, {:activity => valid_attributes}, valid_session
-            }.to change(Activity, :count).by(1)
+          }.to change(Activity, :count).by(1)
         end
 
         it "assigns a newly created activity as @activity" do
+          post :create, {:activity => valid_attributes}, valid_session
           expect(assigns(:activity)).to be_a(Activity)
           expect(assigns(:activity)).to be_persisted
         end
 
         it "redirects to the activities list" do
+          post :create, {:activity => valid_attributes}, valid_session
           expect(response).to redirect_to(activities_url)
         end
       end

@@ -19,14 +19,7 @@ FactoryGirl.define do
     project_id 	1
 		task_id 		1
 		user_id 		1
-		start				{ Faker::Date.backward(14) }
-
-		factory :activity_invalid do
-			project_id	nil
-			task_id			nil
-			subtask_id 	1
-			user_id 		1
-		end
+		start				{ I18n.l DateTime.now, format: "%d/%m/%Y %H:%M" }
   end
 
 end
