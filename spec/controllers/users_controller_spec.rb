@@ -1,23 +1,15 @@
 require 'rails_helper'
 
 RSpec.describe UsersController, :type => :controller do
-		
+    
     let(:admin) { FactoryGirl.create(:user_admin) }
-		let(:user) { FactoryGirl.create(:user) }
-		let(:user1) { FactoryGirl.create(:user) }
-		let(:user2) { FactoryGirl.create(:user) }
-
-  let(:valid_attributes) {
-    FactoryGirl.attributes_for(:user)
-  }
-
-  let(:invalid_attributes) {
-    FactoryGirl.attributes_for(:user_invalid)
-  }
+    let(:user) { FactoryGirl.create(:user) }
+    let(:user1) { FactoryGirl.create(:user) }
+    let(:user2) { FactoryGirl.create(:user) }
 
   context "when user is admin" do
-		before(:each) do
-      login_user(admin)
+    before(:each) do
+      sign_in(admin)
     end
   
     describe "when login" do
@@ -26,14 +18,6 @@ RSpec.describe UsersController, :type => :controller do
       end
       it "the current user is admin" do
         expect(controller.current_user.admin).to be true
-      end
-    end
-
-    describe "GET new" do
-      it "returns http success" do
-        get :new
-        expect(response).to be_success
-        expect(response).to have_http_status(200)
       end
     end
 
@@ -50,90 +34,53 @@ RSpec.describe UsersController, :type => :controller do
     end
 
     describe "GET index" do
-    	it "returns http success" do
-     		get :index, {}
-    		expect(response).to be_success
-    		expect(response).to have_http_status(200)
-    	end
-    	it "renders the index template" do
-    		get :index, {}
-    		expect(response).to render_template(:index)
-    	end
-    	it "shows the list of users" do
-    		get :index, {}
-    		expect(assigns(:users)).to match_array([admin, user1, user2])
-    	end
-    end
-
-    describe "POST create" do
-      describe "with valid params" do
-        it "creates a new User" do
-          expect {
-            post :create, {:user => valid_attributes}
-          }.to change(User, :count).by(1)
-        end
-
-        it "assigns a newly created user as @user" do
-          post :create, {:user => valid_attributes}
-          expect(assigns(:user)).to be_a(User)
-          expect(assigns(:user)).to be_persisted
-        end
-
-        it "redirects to the users list" do
-          post :create, {:user => valid_attributes}
-          expect(response).to redirect_to(users_path)
-        end
+      it "returns http success" do
+        get :index, {}
+        expect(response).to be_success
+        expect(response).to have_http_status(200)
       end
-
-      describe "with invalid params" do
-        it "assigns a newly created but unsaved user as @user" do
-          post :create, {:user => invalid_attributes}
-          expect(assigns(:user)).to be_a_new(User)
-        end
-
-        it "re-renders the 'new' template" do
-          post :create, {:user => invalid_attributes}
-          expect(response).to render_template("new")
-        end
+      it "renders the index template" do
+        get :index, {}
+        expect(response).to render_template(:index)
+      end
+      it "shows the list of users" do
+        get :index, {}
+        expect(assigns(:users)).to match_array([admin, user1, user2])
       end
     end
 
     describe "PUT update" do
       describe "with valid params" do
-        let(:new_attributes) {
-          FactoryGirl.attributes_for(:user)
-        }
-
         it "updates the requested user" do
-          user = User.create! valid_attributes
-          put :update, {:id => user.to_param, :user => new_attributes}
+          user = FactoryGirl.create :user
+          put :update, {:id => user.to_param, :user => { name: Faker::Lorem.word }}
           user.reload
           expect(assigns(:user)).to eq(user)
         end
 
         it "assigns the requested user as @user" do
-          user = User.create! valid_attributes
-          put :update, {:id => user.to_param, :user => valid_attributes}
+          user = FactoryGirl.create :user
+          put :update, {:id => user.to_param, :user => { name: Faker::Lorem.word }}
           expect(assigns(:user)).to eq(user)
         end
 
         it "redirects to the user" do
-          user = User.create! valid_attributes
-          put :update, {:id => user.to_param, :user => valid_attributes}
+          user = FactoryGirl.create :user
+          put :update, {:id => user.to_param, :user => { name: Faker::Lorem.word }}
           expect(response).to redirect_to(user)
         end
       end
 
       describe "with invalid params" do
         it "assigns the user as @user" do
-          user = User.create! valid_attributes
-          put :update, {:id => user.to_param, :user => invalid_attributes}
+          user = FactoryGirl.create :user
+          put :update, {:id => user.to_param, :user => { email: nil }}
           expect(assigns(:user)).to eq(user)
         end
 
         it "re-renders the 'edit' template" do
-          user = User.create! valid_attributes
-          put :update, {:id => user.to_param, :user => invalid_attributes}
+          user = FactoryGirl.create :user
+          put :update, {:id => user.to_param, :user => { email: nil }}
           expect(response).to render_template("edit")
         end
       end
@@ -141,14 +88,14 @@ RSpec.describe UsersController, :type => :controller do
 
     describe "DELETE destroy" do
       it "destroys the requested user" do
-        user = User.create! valid_attributes
+        user = FactoryGirl.create :user
         expect {
           delete :destroy, {:id => user.to_param}
         }.to change(User, :count).by(-1)
       end
 
       it "redirects to the users list" do
-        user = User.create! valid_attributes
+        user = FactoryGirl.create :user
         delete :destroy, {:id => user.to_param}
         expect(response).to redirect_to(users_path)
       end
@@ -156,9 +103,11 @@ RSpec.describe UsersController, :type => :controller do
 
   end
 
+# TODO enable tests when pundit
+=begin
   context "when user is not admin" do
     before(:each) do
-      login_user(user)
+      sign_in(user)
     end
   
     describe "when login" do
@@ -167,14 +116,6 @@ RSpec.describe UsersController, :type => :controller do
       end
       it "the current user is not admin" do
         expect(controller.current_user.admin).to be false
-      end
-    end
-
-    describe "GET new" do
-      it "returns http success" do
-        get :new
-        expect(response).to be_success
-        expect(response).to have_http_status(200)
       end
     end
 
@@ -201,65 +142,29 @@ RSpec.describe UsersController, :type => :controller do
       end
     end
 
-    describe "POST create" do
-      describe "with valid params" do
-        it "creates a new User" do
-          expect {
-            post :create, {:user => valid_attributes}
-          }.to change(User, :count).by(1)
-        end
-
-        it "assigns a newly created user as @user" do
-          post :create, {:user => valid_attributes}
-          expect(assigns(:user)).to be_a(User)
-          expect(assigns(:user)).to be_persisted
-        end
-
-        it "redirects to the users list" do
-          post :create, {:user => valid_attributes}
-          expect(response).to redirect_to(users_path)
-        end
-      end
-
-      describe "with invalid params" do
-        it "assigns a newly created but unsaved user as @user" do
-          post :create, {:user => invalid_attributes}
-          expect(assigns(:user)).to be_a_new(User)
-        end
-
-        it "re-renders the 'new' template" do
-          post :create, {:user => invalid_attributes}
-          expect(response).to render_template("new")
-        end
-      end
-    end
-
     describe "PUT update" do
       describe "with valid params" do
-        let(:new_attributes) {
-          FactoryGirl.attributes_for(:user)
-        }
 
         it "cannot update the requested user" do
-          put :update, {:id => user.to_param, :user => new_attributes}
+          put :update, {:id => user.to_param, :user => { name: Faker::Lorem.word }}
           user.reload
           expect(assigns(:user)).not_to eq(user)
         end
 
         it "assigns the requested user as @user" do
-          put :update, {:id => user.to_param, :user => valid_attributes}
+          put :update, {:id => user.to_param, :user => { name: Faker::Lorem.word }}
           expect(assigns(:user)).not_to eq(user)
         end
 
         it "redirects to the root" do
-          put :update, {:id => user.to_param, :user => valid_attributes}
+          put :update, {:id => user.to_param, :user => { name: Faker::Lorem.word }}
           expect(response).to redirect_to(root_path)
         end
       end
 
       describe "with invalid params" do
         it "redirects to root" do
-          put :update, {:id => user.to_param, :user => invalid_attributes}
+          put :update, {:id => user.to_param, :user => { email: nil }}
           expect(response).to redirect_to(root_path)
         end
       end
@@ -279,5 +184,6 @@ RSpec.describe UsersController, :type => :controller do
     end
 
   end
+=end
 
 end

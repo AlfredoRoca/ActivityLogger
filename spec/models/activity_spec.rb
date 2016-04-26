@@ -16,21 +16,13 @@
 
 require 'rails_helper'
 
-describe "Integration test", type: :feature do
+RSpec.describe Activity, type: :model do
   
-  let!(:admin) { FactoryGirl.create(:user_admin) }
-  let!(:project) { FactoryGirl.create(:project) }
-  let!(:task) { FactoryGirl.create(:task) }
-  let!(:user) { FactoryGirl.create(:user) }
-
-  before(:each) do
-    login_user_post(admin.email, "123")
-  end
+  let(:admin)   { FactoryGirl.create(:user_admin) }
+  let(:user)    { FactoryGirl.create(:user) }
+  let(:project) { FactoryGirl.create(:project) }
+  let(:task)    { FactoryGirl.create(:task) }
   
-  it "signs me in" do
-    expect(page).to have_content 'You are being redirected'
-  end
-
   context "when checking validations" do
     it "rejects without project" do
       activity = FactoryGirl.build :activity, project_id: nil, task_id: task.id, user_id: user.id

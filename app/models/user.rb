@@ -5,7 +5,6 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable,
          :confirmable, :lockable
 
-  validates :name, presence: true, uniqueness: true, on: :update, if: :not_changing_password?
   validates :email, presence: true, uniqueness: true
 
   has_many :activities
@@ -18,6 +17,5 @@ class User < ActiveRecord::Base
   def not_changing_password?
     !changed.include?("encrypted_password")
   end
-
 
 end

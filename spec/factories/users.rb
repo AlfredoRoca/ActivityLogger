@@ -1,33 +1,19 @@
-# == Schema Information
-#
-# Table name: users
-#
-#  id               :integer          not null, primary key
-#  email            :string           not null
-#  crypted_password :string           not null
-#  salt             :string           not null
-#  created_at       :datetime
-#  updated_at       :datetime
-#  name             :string
-#  admin            :boolean          default("false")
-#
-
-require 'faker'
-
 FactoryGirl.define do
   factory :user do
-      name                  {Faker::Name.name}
-      email                 {Faker::Internet.email}
-      admin                 {false}
-      password              {"123"}
-      password_confirmation {"123"}
+      name                  { Faker::Name.name }
+      email                 { Faker::Internet.email }
+      admin                 { false }
+      password              { "123123123" }
+      password_confirmation { "123123123" }
+      confirmed_at          DateTime.now
 
     factory :user_admin do
-      name                  {Faker::Name.name}
-      email                 {Faker::Internet.email}
-      admin                 {true}
-      password              {"123"}
-      password_confirmation {"123"}
+      name                  { Faker::Name.name }
+      email                 { Faker::Internet.email }
+      admin                 { true }
+      password              { "123123123" }
+      password_confirmation { "123123123" }
+      confirmed_at          DateTime.now
   	end
 
     factory :user_invalid do

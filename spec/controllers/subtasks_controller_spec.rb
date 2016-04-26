@@ -38,7 +38,7 @@ RSpec.describe SubtasksController, :type => :controller do
 
   context "when logged as admin" do
     before(:each) do
-      login_user(admin)
+      sign_in(admin)
     end
 
     describe "GET index" do
@@ -138,9 +138,10 @@ RSpec.describe SubtasksController, :type => :controller do
     end
   end
 
+=begin
   context "when logged as a non-admin user" do
       before(:each) do
-        login_user(user)
+        sign_in(user)
       end
 
       describe "GET index" do
@@ -239,4 +240,5 @@ RSpec.describe SubtasksController, :type => :controller do
         end
       end
     end
+=end
 end
