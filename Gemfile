@@ -41,8 +41,6 @@ gem 'bcrypt', '~> 3.1.7'
 # Use debugger
 # gem 'debugger', group: [:development, :test]
 
-gem 'sorcery'
-
 # A fast and very simple Ruby web server
 gem 'eventmachine', '1.0.7'
 gem 'thin' 
@@ -102,3 +100,5 @@ gem 'bootstrap3-datetimepicker-rails', '~> 4.7.14'
 
 # Airbrussh is a replacement log formatter for SSHKit that makes your Capistrano output much easier on the eyes
 gem "airbrussh", :require => false
+
+gem 'devise'

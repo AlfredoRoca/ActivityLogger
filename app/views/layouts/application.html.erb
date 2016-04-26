@@ -12,10 +12,12 @@
 <body>
 
 	<%= render 'layouts/main_menu' %>
-	<div>
-		<p id="notice"><%= flash[:notice] %></p>
-		<p id="alert"><%= flash[:alert] %></p>
+
+	<div style="text-align: center; margin-top: 3em;">
+    <p id="notice"><h3><%= flash[:notice] %></h3></p>
+    <p id="alert"><h3><%= flash[:alert] %></h3></p>
 	</div>
+
 <div class="container">
   <div class="row">
     <%= yield %>

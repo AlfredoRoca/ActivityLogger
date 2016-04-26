@@ -10,12 +10,12 @@
 
 require 'rails_helper'
 
-describe "Integration test", type: :feature do
+describe Project, type: :model do
 	
 	let!(:admin) { FactoryGirl.create(:user_admin) }
 
 	before(:each) do
-		login_user_post(admin.email, "123")
+		login_user(admin)
 	end
 
 	context "when checking validations" do
@@ -26,7 +26,7 @@ describe "Integration test", type: :feature do
 		end
 		it "rejects with an existing name" do
 			project1 = FactoryGirl.create :project
-			project = FactoryGirl.build :project, name: project1.name
+			project = FactoryGirl.build :project, name: project1.name.upcase
 			expect(project.valid?).to be false
 			expect(project.errors["name"].present?).to be true
 		end

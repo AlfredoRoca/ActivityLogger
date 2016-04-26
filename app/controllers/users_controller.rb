@@ -1,6 +1,5 @@
 class UsersController < ApplicationController
-  skip_before_filter :require_login #, only: [:new, :create]
-  before_filter :require_admin, except: [:profile, :new, :create]
+  before_action :authenticate_user! 
   before_action :set_user, only: [:edit, :show, :destroy, :update]
   
   def profile

@@ -34,13 +34,6 @@ RSpec.configure do |config|
     DatabaseCleaner.clean
   end 
 
-  config.include Sorcery::TestHelpers::Rails::Controller, type: :controller
-  config.include Sorcery::TestHelpers::Rails::Integration, type: :feature
 end
 
-Rails.application.config.sorcery.configure do |config|
-  config.user_config do |user|
-    user.encryption_algorithm = :md5 if Rails.env.test?
-  end
-end
 

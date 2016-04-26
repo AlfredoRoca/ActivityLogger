@@ -1,6 +1,5 @@
 class ReportsController < ApplicationController
-  
-  before_filter :require_admin
+  before_action :authenticate_user! 
 
   respond_to :html, :json, :pdf
 

@@ -8,7 +8,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#">ActivityLogger</a>
+      <a class="navbar-brand" href=<%= root_url %>>ActivityLogger</a>
     </div>
 
       <!-- Collect the nav links, forms, and other content for toggling -->
@@ -28,10 +28,10 @@
         <% if current_user %>
           <p class="navbar-text">Welcome <%= current_user.name %></p>
           <li><%= link_to "Edit profile", profile_path %></li>
-          <li><%= link_to "Logout", :logout, method: :post %></li>
+          <li><%= link_to "Logout", destroy_user_session_path, method: :delete %></li>
         <% else %>
-          <li><%= link_to "Register", new_user_path %></li>
-          <li><%= link_to "Login", :login %></li>
+          <li><%= link_to "Register", new_user_registration_path %></li>
+          <li><%= link_to "Login", new_user_session_path %></li>
         <% end %>
       </ul>
 
