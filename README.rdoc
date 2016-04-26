@@ -12,3 +12,13 @@ Rails 4.2.6
 Run Rspec tests with: spring rspec
 
 After creating the database, run rake db:seed to enter the admin user.
+
+*Activity import file:*
+
+Sintaxis
+
+    DD/MM[YY default current] PROJ [TASK default prog [SUBTASK]] HH:MM-HH:MM [HH:MM-HH:MM] [HH:MM-HH:MM] ... #description
+
+    name, code or alias, case insensitive
+    HH[:MM]-HH[:MM] start-end (MM default :00)
+
