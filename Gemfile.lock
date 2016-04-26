@@ -332,7 +332,6 @@ DEPENDENCIES
   jquery-turbolinks
   jquery-ui-rails
   kaminari
-  momentjs-rails (>= 2.9.0)
   pg (~> 0.18.3)
   prawn
   pry

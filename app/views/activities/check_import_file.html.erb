@@ -1,5 +1,5 @@
 <h1>Import checking</h1>
-<%= link_to 'Back', :back, class: "btn btn-default btn-lg" %>
+<%= link_to 'Back', :back, class: "btn btn-default btn-success" %>
 
 <% klass_invalid = @invalid > 0 ? "invalid-line" : "" %>
 <% klass_mustchk = @must_check > 0 ? "check-this-line" : "" %>
@@ -49,5 +49,5 @@
 
 <%= form_tag execute_import_path do -%>
   <%= hidden_field_tag :original_filename, @original_filename %>
-  <%= submit_tag "Execute import", class: "btn btn-default btn-lg" %>
+  <%= submit_tag "Execute import", class: "btn btn-default btn-danger" %>
 <% end -%>

@@ -21,10 +21,16 @@ class ActivitiesController < ApplicationController
   # GET /activities
   # GET /activities.json
   def index
-    if current_user.admin
-      @activities = Activity.all.includes(:project, :task, :subtask, :user).ordered_last_first.page params[:page]
+    if request.path_parameters[:format] == 'json'
+      if current_user.admin
+        @activities = Activity.all.includes(:project, :task, :subtask, :user)
+        # @activities = Activity.all.includes(:project, :task, :subtask, :user).ordered_last_first.page params[:page]
+      else
+        @activities = Activity.for_user(current_user.id).includes(:project, :task, :subtask, :user)
+        # @activities = Activity.for_user(current_user.id).ordered_last_first.page params[:page]
+      end
     else
-      @activities = Activity.for_user(current_user.id).ordered_last_first.page params[:page]
+      @activities = Activity.none
     end
   end
 

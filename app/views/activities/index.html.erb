@@ -1,47 +1,67 @@
+<!-- table implemented with bootstrap-table -->
+<% content_for :js do %>
+  <%= javascript_include_tag 'bootstrap-table-formatters', 'data-turbolinks-track' => true %>
+<% end %>
+
+
 <h1><%= t :Listing_activities %></h1>
-<%= link_to 'New Activity', new_activity_path, class: "btn btn-default btn-lg" %>
 
-<%= form_tag(upload_activities_file_path, {:class => "form", multipart: true}) do %>
-  <%= file_field_tag :import_file_name %>
-  <%= hidden_field_tag :import_file_name_cache %>
-  <%= submit_tag "Upload and parse", class: "btn btn-default btn-lg"  %>
-<% end -%>
+<div class="row">
+  <div class="col-md-1">
+    <%= link_to 'New Activity', new_activity_path, class: "btn btn-success" %>
+  </div>
+  <div class="col-md-1"></div>
+  <div class="col-md-10">
+    <%= form_tag(upload_activities_file_path, {:class => "form", multipart: true}) do %>
+      <%= file_field_tag :import_file_name, style: "float: left;" %>
+      <%= hidden_field_tag :import_file_name_cache %>
+      <%= submit_tag "Upload and parse", class: "btn btn-primary"  %>
+    <% end -%>
+  </div>
+</div>
 
 
-<table class="table table-stripped table-condensed">
-  <thead>
-    <tr>
-      <th>PId</th>
-      <th>Project</th>
-      <th>Task</th>
-      <th>Subtask</th>
-      <th>User</th>
-      <th>Start</th>
-      <th>End</th>
-      <th>Duration</th>
-      <th>Description</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
+<!-- modal popup to user actions -->
+<div class="modal fade" id="managmentModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Managment</h4>
+      </div>
+      <div class="modal-body">
+        <p class="btn btn-default" id="showPath"></p>
+        <p class="btn btn-default" id="editPath"></p>
+        <p class="btn btn-default" id="destroyPath"></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal"><%= t(:Close_modal) %></button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<table id="table" class="table table-striped" data-toggle="table" data-sort-name="id" data-sort-order="desc" data-pagination=true data-search=true data-show-pagination-switch=true data-show-refresh=true data-show-columns=true data-search-align="left" data-buttons-align="left" data-pagination-v-align="both" data-pagination-h-align="right" data-url="/activities.json" data-page-list=[5,10,25] data-mobile-responsive=true data-check-on-init=true>
+    <thead>
+      <tr>
+        <th data-field="id"           data-sortable=true data-searchable=true >Id</th>
+        <th data-field="project_name" data-sortable=true data-searchable=true >Project</th>
+        <th data-field="task_name"    data-sortable=true data-searchable=true >Task</th>
+        <th data-field="subtask_name" data-sortable=true data-searchable=true >Subtask</th>
+        <th data-field="user_name"    data-sortable=true data-searchable=true >User</th>
+        <th data-field="start"        data-sortable=true data-searchable=true data-formatter=dateFormatter>Start</th>
+        <th data-field="ended"        data-sortable=true data-searchable=true data-formatter=dateFormatter>End</th>
+        <th data-field="duration"     data-sortable=true data-searchable=true >Duration</th>
+        <th data-field="description"  data-sortable=true data-searchable=true >Description</th>
+      </tr>
+    </thead>
 
   <tbody>
     <% @activities.each do |activity| %>
       <tr>
-        <td><%= activity.project.id %></td>
-        <td><%= activity.project.name %></td>
-        <td><%= activity.task.name %></td>
-        <td><%= activity.subtask.name if activity.subtask %></td>
-        <td><%= activity.user.name if activity.user %></td>
-        <td><%= localize_date activity.start %></td>
-        <td><%= localize_date activity.ended %></td>
-        <td><%= duration_to_s(activity.duration) %></td>
-        <td><%= activity.description %></td>
-        <td><%= link_to 'Show', activity %></td>
-        <td><%= link_to 'Edit', edit_activity_path(activity) %></td>
-        <td><%= link_to 'Destroy', activity, method: :delete, data: { confirm: 'Are you sure?' } if current_user && current_user.admin? %></td>
       </tr>
     <% end %>
   </tbody>
 </table>
 
-<p><%= paginate @activities %></p>
+<script>bindEventsToTable();</script>
