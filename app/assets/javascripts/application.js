@@ -15,7 +15,7 @@
 //= require jquery_ujs
 //= require bootstrap-sprockets
 
-//= require moment/moment.min.js
+//= require moment/moment_with_locales.js
 
 // require moment
 // require moment/es

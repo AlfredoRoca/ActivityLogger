@@ -1,7 +1,7 @@
 var setupDateTimePickers = function (start, ended) {
   $('#datetimepicker_start').datetimepicker({
     format: "D/M/YYYY HH:mm",
-    defaultDate: start,
+    defaultDate: moment(start),
     collapse: false,
     sideBySide: true,
     calendarWeeks: true,
@@ -14,7 +14,7 @@ var setupDateTimePickers = function (start, ended) {
   });
   $('#datetimepicker_ended').datetimepicker({
     format: "D/M/YYYY HH:mm",
-    defaultDate: ended,
+    defaultDate: moment(ended),
     collapse: false,
     sideBySide: true,
     calendarWeeks: true,
@@ -35,4 +35,4 @@ var setupDateTimePickers = function (start, ended) {
 }
 
 // $(document).ready(setupDateTimePickers);
-$(document).on('page:load', setupDateTimePickers(moment(),moment()));
+// $(document).on('page:load', setupDateTimePickers(moment(),moment()));

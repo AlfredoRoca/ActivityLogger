@@ -71,5 +71,5 @@
 <% end %>
 
 <script>
-  setupDateTimePickers("<%= @activity.start %>", "<%= @activity.ended %>");
+  setupDateTimePickers("<%= @activity.start.to_time.iso8601 %>", "<%= @activity.ended.to_time.iso8601 %>");
 </script>
