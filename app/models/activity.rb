@@ -78,7 +78,8 @@ class Activity < ActiveRecord::Base
       start = line[:start]
       ended = line[:ended]
       duration = line[:duration]
-      Activity.create({ project_id: project_id, task_id: task_id, subtask_id: subtask_id, user_id: user_id, start: start.getutc, ended: ended, duration: duration })
+      description = line[:description]
+      Activity.create({ project_id: project_id, task_id: task_id, subtask_id: subtask_id, user_id: user_id, start: start.getutc, ended: ended, duration: duration, description: description })
       counter += 1
     end
     counter
@@ -107,7 +108,7 @@ class Activity < ActiveRecord::Base
     result = []
 
     elements = line.split
-    # => ["17/6", "shk", "prog", "11:30-14:00", "15:00-18:00"]
+    # => ["17/6", "shk", "prog", "11:30-14:00", "15:00-18:00", "#comentario"]
 begin
     date = elements[0]
     # TODO if date comes with 2-digit year, change to 4-digit
@@ -116,6 +117,17 @@ begin
     task = default_task
     task = elements[2] if elements[2] =~ /^[A-za-z]/
     subtask = elements[3] if elements[3] =~ /^[A-za-z]/
+
+    # description line
+    # find in which elements is the simbol #
+    # join that and following ones and remove the #
+    # drop those elements
+    unless (description_starts_at = elements.index{|a| a =~ /^#/}).nil?
+      description = elements.last(elements.length-description_starts_at).join(" ")
+      description = description.slice(1, description.length - 1)
+      elements = elements.take(description_starts_at)
+    end
+
     periods = elements.drop(2)
     periods = periods.drop_while{|p| p =~ /^[A-za-z]/}
     periods.each do |period|
@@ -140,7 +152,7 @@ begin
       ended += 1.day if start > ended
       duration = ApplicationController.helpers.duration_to_s((ended - start).to_i)
       must_check = must_check || (ended - start) >= 10.hours
-      result << self.parse_activity_line(counter, proj, task, subtask, start, ended, duration, must_check)
+      result << self.parse_activity_line(counter, proj, task, subtask, start, ended, duration, description, must_check)
     end
     return result
   rescue => error
@@ -151,8 +163,8 @@ begin
     
   end
 
-  def self.parse_activity_line(counter, proj, task, subtask, start, ended, duration, must_check)
-    line = { "line_num": counter, "proj": proj, "task": task, "subtask": subtask, "start": start, "ended": ended, "duration": duration, "must_check": must_check }
+  def self.parse_activity_line(counter, proj, task, subtask, start, ended, duration, description, must_check)
+    line = { "line_num": counter, "proj": proj, "task": task, "subtask": subtask, "start": start, "ended": ended, "duration": duration, "description": description, "must_check": must_check }
     line_objects = self.get_line_objects(line)
     line.merge!({ "invalid": self.line_invalid?(line_objects) })
     line.merge!({ "objects": line_objects })

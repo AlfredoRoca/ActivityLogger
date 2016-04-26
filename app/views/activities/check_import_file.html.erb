@@ -18,6 +18,7 @@
       <th>Start</th>
       <th>End</th>
       <th>Duration</th>
+      <th>Description</th>
       <th>Invalid?</th>
       <th>Error</th>
       <th>Objects</th>
@@ -37,6 +38,7 @@
         <td><%= localize_date(line[:start]) if line[:start] %></td>
         <td><%= localize_date(line[:ended]) if line[:ended] %></td>
         <td><%= line[:duration] if line[:duration] %></td>
+        <td><%= line[:description] if line[:description] %></td>
         <td><%= line[:invalid] if line[:invalid] %>
         <td><%= line[:error] if line[:error] %></td>
         <td><%= line[:objects] if line[:objects] %></td>

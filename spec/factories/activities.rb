@@ -20,6 +20,7 @@ FactoryGirl.define do
 		task_id 		1
 		user_id 		1
 		start				{ I18n.l DateTime.now, format: "%d/%m/%Y %H:%M" }
+    description { Faker::Lorem.sentence }
   end
 
 end
