@@ -1,7 +1,7 @@
 var setupDateTimePickers = function (start, ended) {
   $('#datetimepicker_start').datetimepicker({
     format: "D/M/YYYY HH:mm",
-    defaultDate: moment(start),
+    defaultDate: start,
     collapse: false,
     sideBySide: true,
     calendarWeeks: true,
@@ -14,7 +14,7 @@ var setupDateTimePickers = function (start, ended) {
   });
   $('#datetimepicker_ended').datetimepicker({
     format: "D/M/YYYY HH:mm",
-    defaultDate: moment(ended),
+    defaultDate: ended,
     collapse: false,
     sideBySide: true,
     calendarWeeks: true,
