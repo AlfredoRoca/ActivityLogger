@@ -25,6 +25,9 @@ Sintaxis
 * 26/4/2016 Important!
 
 Changes Sorcery by Devise to authenticate users
-- In rails console, change admin email by a proper email
+
+In rails console, update user values
     
     User.first.update_column(:email, "your email")
+    User.first.update(password: "your password")
+    User.first.update_column(:confirmed_at, DateTime.now)
