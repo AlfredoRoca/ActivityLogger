@@ -34,7 +34,7 @@ class GittagsController < ApplicationController
     @project.gittags.clear
     params[:gittags_text].each_line do |line| 
       gitline = line.split(" ", 6)
-      @gittag = @project.gittags.create(commit: gitline.slice(1,1).first, date: DateTime.parse(gitline.slice(2,3).join(" ")), description: gitline.slice(5, gitline.size).first )
+      @gittag = @project.gittags.create(commit: gitline.slice(1,1).first, date: DateTime.parse(gitline.slice(2,3).join(" ")).iso8601, description: gitline.slice(5, gitline.size).first )
 
     end
 

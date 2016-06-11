@@ -32,7 +32,7 @@ class Project < ActiveRecord::Base
     all_gittags = gittags.order(date: :asc)
     previous_date = DateTime.parse("1/1/1970") # initial date
     all_gittags.map do |gt|
-      gt.update_column(:activity_duration, long_duration_to_s(activities.where("start >= ? and ended <= ?", previous_date, gt.date).sum(:duration)))
+      gt.update_column(:activity_duration, long_duration_to_s(activities.where("start >= ? and start <= ?", previous_date, gt.date).sum(:duration)))
       previous_date = gt.date
     end
   end

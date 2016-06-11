@@ -16,7 +16,7 @@ class ProjectsController < ApplicationController
   # GET /projects/1
   # GET /projects/1.json
   def show
-    @gittags = @project.gittags
+    @gittags = @project.gittags.order(date: :asc)
   end
 
   # GET /projects/new
