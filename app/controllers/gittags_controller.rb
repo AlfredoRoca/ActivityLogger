@@ -44,7 +44,7 @@ class GittagsController < ApplicationController
 
     @project.calculate_activity_duration_per_gittag
 
-    redirect_to request.referer, notice: 'Gittag was successfully created.'
+    redirect_to request.referer, notice: 'Gittags successfully created.'
   end
 
   def destroy
