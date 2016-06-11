@@ -31,3 +31,8 @@ In rails console, update user values
     User.first.update_column(:email, "your email")
     User.first.update(password: "your password")
     User.first.update_column(:confirmed_at, DateTime.now)
+
+* 11/6/2016
+
+New feature: you can enter git tags information (in project info) to calculate duration between tags. This can be useful to estimate feature development duration time.
+
