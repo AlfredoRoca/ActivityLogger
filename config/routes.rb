@@ -9,7 +9,12 @@ Rails.application.routes.draw do
   resources :subtasks
   resources :tasks
   resources :activities, concerns: :paginatable
-  resources :projects
+  resources :projects do
+    member do
+      get :update_activity_duration_per_gittag
+    end
+    resources :gittags
+  end
   resources :teams
 
   root 'welcome#welcome'

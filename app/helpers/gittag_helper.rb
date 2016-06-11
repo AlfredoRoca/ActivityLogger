@@ -1,0 +1,2 @@
+module GittagHelper
+end

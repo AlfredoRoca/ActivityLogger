@@ -1,12 +1,10 @@
+<h1><%= @project.name %> Alias <%= @project.alias %></h1>
+
 <%= link_to 'Edit', edit_project_path(@project) %> |
 <%= link_to 'Back', projects_path %>
 
-<p>
-  <strong>Name:</strong>
-  <%= @project.name %> Alias <%= @project.alias %>
-</p>
 
-<p>Audits</p>
+<h3>Audits</h3>
 <table>
   <thead>
     <tr>
@@ -31,6 +29,46 @@
         <td>
           <%= audit.audited_changes %>
         </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<h2>Git Tags</h2>
+<p>Copy here the result text of the following console command:</p>
+<code>git log --graph --tags --date-order --simplify-by-decoration  --decorate --oneline --pretty=format:"%h %ai %d %s" | grep tag</code>
+<p></p>
+
+<p>Each line should be like this:</p>
+<code>* 66ab102 2016-03-25 19:01:53 +0100  (HEAD, tag: v0.3, origin/master, master) this is the commit message</code>
+<p></p>
+
+<%= form_tag project_gittags_path(@project) do %>
+  <%= text_area_tag :gittags_text, nil, {rows: "10", style: "width:100%;"} %>
+  <%= submit_tag "Delete all previous information and add this one" %>
+<% end -%>
+
+<p><%= link_to "Update activity duration per Git Tag", update_activity_duration_per_gittag_project_path(@project), class: "pull-right btn btn-default" %></p>
+
+<table class="table table-stripped table-condensed">
+  <thead>
+    <tr>
+      <th>commit</th>
+      <th>date</th>
+      <th>description</th>
+      <th>activity</th>
+      <th colspan="1"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @gittags.each do |gittag| %>
+      <tr>
+        <td><%= gittag.commit %></td>
+        <td><%= gittag.date %></td>
+        <td><%= gittag.description %></td>
+        <td><%= gittag.activity_duration %></td>
+        <td><%= link_to 'Destroy', project_gittag_path(@project, gittag), method: :delete, data: { confirm: 'Are you sure?' } if current_user && current_user.admin? %></td>
       </tr>
     <% end %>
   </tbody>
