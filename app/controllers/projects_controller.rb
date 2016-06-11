@@ -1,6 +1,11 @@
 class ProjectsController < ApplicationController
   before_action :authenticate_user! 
-  before_action :set_project, only: [:show, :edit, :update, :destroy]
+  before_action :set_project, only: [:show, :edit, :update, :destroy, :update_activity_duration_per_gittag]
+
+  def update_activity_duration_per_gittag
+    @project.calculate_activity_duration_per_gittag
+    redirect_to request.referer
+  end
 
   # GET /projects
   # GET /projects.json
@@ -11,6 +16,7 @@ class ProjectsController < ApplicationController
   # GET /projects/1
   # GET /projects/1.json
   def show
+    @gittags = @project.gittags
   end
 
   # GET /projects/new
