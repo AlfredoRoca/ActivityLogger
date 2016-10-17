@@ -4,10 +4,11 @@ namespace :setup do
   task :upload_sensitive_files do
     on roles(:app) do
       execute "mkdir -p #{shared_path}/config"
-      upload! StringIO.new(File.read("config/database.yml")), "#{shared_path}/config/database.yml"
-      upload! StringIO.new(File.read("config/secrets.yml")), "#{shared_path}/config/secrets.yml"
-      upload! StringIO.new(File.read("config/deploy/staging.rb")), "#{shared_path}/config/deploy/staging.rb"
-      upload! StringIO.new(File.read("config/local_env.yml")), "#{shared_path}/config/local_env.yml"
+      # upload! StringIO.new(File.read("config/database.yml")), "#{shared_path}/config/database.yml"
+      # upload! StringIO.new(File.read("config/secrets.yml")), "#{shared_path}/config/secrets.yml"
+      # upload! StringIO.new(File.read("config/deploy/staging.rb")), "#{shared_path}/config/deploy/staging.rb"
+      # upload! StringIO.new(File.read("config/local_env.yml")), "#{shared_path}/config/local_env.yml"
+      upload! StringIO.new(File.read("config/local_vars.yml")), "#{shared_path}/config/local_vars.yml"
         puts "*************************************************************"
         puts "*************************************************************"
         puts "*************************************************************"

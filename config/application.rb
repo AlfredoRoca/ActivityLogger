@@ -40,11 +40,11 @@ module ActivityLogger
       # YAML.load(File.open(env_file)).each do |key, value|
       #   ENV[key.to_s] = value
       # end if File.exists?(env_file)
-      filepath = Rails.root + 'config/local_vars.yml'
-      if File.exists?(filepath)
-        lines = IO.readlines(filepath)
+      local_vars_file = File.join(Rails.root, 'config', 'local_vars.yml')
+      if File.exists?(local_vars_file)
+        lines = IO.readlines(local_vars_file)
         lines.each do |l|
-          ENV[l.split('=')[0]] = l.split('=')[1]
+          ENV[l.split('=')[0]] = l.split('=')[1].chomp unless l.blank?
         end
       end
     end
