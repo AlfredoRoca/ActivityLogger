@@ -36,3 +36,5 @@ In rails console, update user values
 
 New feature: you can enter git tags information (in project info) to calculate duration between tags. This can be useful to estimate feature development duration time.
 
+Create uploads folder under public
+
