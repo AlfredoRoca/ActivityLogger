@@ -1,7 +1,26 @@
 class ReportsController < ApplicationController
   before_action :authenticate_user! 
 
+  include ApplicationHelper
+
   respond_to :html, :json, :pdf
+
+  def activity_report
+    starting = format_date(params['starting_date'.to_sym])
+    ending = format_date(params['ending_date'.to_sym])
+    @activities = Activity.where('start >= ? and start <= ?', starting, ending).includes(:project, :task, :subtask, :user).order(:project_id, :start)
+
+# TODO user param[:filter] to extra filter type ilike
+
+    respond_to do |format|
+      format.html { render json: @activities }
+      format.json
+      format.pdf do
+        pdf = ActivityReportPdf.new(@activities, starting, ending)
+        send_data pdf.render, file_name: 'activity_report.pdf', type: 'application/pdf'
+      end
+    end
+  end
 
   def project_report
     @project = Project.find(params[:project_id])

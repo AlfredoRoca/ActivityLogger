@@ -2,6 +2,8 @@ class ActivitiesController < ApplicationController
   before_action :authenticate_user! 
   before_action :set_activity, only: [:show, :edit, :update, :destroy]
 
+  include ApplicationHelper
+
   def upload_activities_file
     filename = params[:import_file_name]
     @original_filename = filename.original_filename
@@ -21,10 +23,19 @@ class ActivitiesController < ApplicationController
   # GET /activities
   # GET /activities.json
   def index
+  # The code in the bootstrap-tables makes ajax call
+    date_time_picker_format = "%d/%m/%Y %H:%M"
+    params['starting_date'.to_sym] = (Time.now - 1.week).strftime(date_time_picker_format) if params['starting_date'.to_sym].blank?
+    params['ending_date'.to_sym] = Time.now.strftime(date_time_picker_format) if params['ending_date'.to_sym].blank?
+    starting = format_date(params['starting_date'.to_sym])
+    ending = format_date(params['ending_date'.to_sym])
+
+    @starting_date = params[:starting_date]
+    @ending_date = params[:ending_date]
+
     if request.path_parameters[:format] == 'json'
       if current_user.admin
-        @activities = Activity.all.includes(:project, :task, :subtask, :user)
-        # @activities = Activity.all.includes(:project, :task, :subtask, :user).ordered_last_first.page params[:page]
+        @activities = Activity.where('start >= ? and start <= ?', starting, ending).includes(:project, :task, :subtask, :user)
       else
         @activities = Activity.for_user(current_user.id).includes(:project, :task, :subtask, :user)
         # @activities = Activity.for_user(current_user.id).ordered_last_first.page params[:page]

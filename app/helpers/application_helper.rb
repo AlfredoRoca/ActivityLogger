@@ -26,4 +26,9 @@ module ApplicationHelper
     (total_seconds/3600).ceil.to_s + "h"
   end
 
+  def format_date(date)
+    # Convert "DD/MM/YYYY HH:MM" (picker format) to "YYYYMMDD HHMMSS" (DB format)
+    date.slice(6,4) + date.slice(3,2) + date.slice(0,2) + " " + date.slice(11,2) + date.slice(14,2) + "00" unless date.nil? || date.length != 16
+  end
+
 end

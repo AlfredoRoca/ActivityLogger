@@ -6,6 +6,38 @@ var url = "/activities/";
 // Complementary code for bootstrap-table
 // 
 
+//
+// Date and time pickers for filtering
+//
+
+var setPickers = function () {
+    $('#starting_date').datetimepicker({
+        calendarWeeks: true,
+        showTodayButton: true,
+        showClear: true,
+        showClose: true,
+        useCurrent: false,
+        locale: 'es',
+        collapse: true,
+        sideBySide: true,
+        // viewDate: true,
+        format: 'DD/MM/YYYY HH:mm',
+    });
+    $('#ending_date').datetimepicker({
+        calendarWeeks: true,
+        showTodayButton: true,
+        showClear: true,
+        showClose: true,
+        useCurrent: false,
+        locale: 'es',
+        collapse: true,
+        sideBySide: true,
+        // viewDate: true,
+        format: 'DD/MM/YYYY HH:mm',
+    });
+  };
+
+
   function dateFormatter(value, row) {
     if (value) { 
       result = moment(value).format("DD/MM/YYYY HH:mm"); 
@@ -59,3 +91,34 @@ var url = "/activities/";
     });
   }
 
+  function queryParams() {
+      var params = new Object();
+      // emergencies and recordings controllers set the vars to fill these ellements
+      // these are necessary to set pickers on load (the only way i can make it work
+      // if they exists, params get their values and updates pickers
+      // if not params get pickers values
+
+      // var start_at = $('#start_at');
+      // var end_at = $('#end_at');
+      // if (start_at.length > 0) {
+      //     params['starting_date'] = start_at.data('start_at');
+      //     $('#starting_date').val(params['starting_date']);
+      // } else {
+      //     params['starting_date'] = $('#starting_date').val();
+      // }
+      // if (end_at.length > 0) {
+      //     params['ending_date'] = end_at.data('end_at');
+      //     $('#ending_date').val(params['ending_date']);
+      // } else {
+      //     params['ending_date'] = $('#ending_date').val();
+      // }
+
+          params['starting_date'] = $('#starting_date').val();
+          params['ending_date'] = $('#ending_date').val();
+
+
+      return params;
+  }
+
+$(document).ready(setPickers);
+$(document).on('page:load', setPickers);
