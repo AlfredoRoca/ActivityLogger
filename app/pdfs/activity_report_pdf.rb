@@ -48,16 +48,20 @@ class ActivityReportPdf < Prawn::Document
       line_text += "#{activity.project.try(:name)} "
       line_text += "#{activity.task.try(:name)} "
       line_text += "#{activity.subtask.try(:name)} "
-      line_text += "#{activity.start} - #{activity.ended} = #{duration_to_s(activity.duration)} #{activity.description}"
+      line_text += "#{localize_date(activity.start)} - #{localize_date(activity.ended)} = #{duration_to_s(activity.duration)} #{activity.description}"
       text line_text
     end
   end
 
   def print_summary
     total_duration = duration_to_s(@activities.sum(:duration))
-    summary_line = "Total duration: #{total_duration}"
-    text summary_line, size: @font_subtitle, style: :bold
-    text "#{total_duration.split(':').first.to_i / 8} working days"
+    total_lines = @activities.size
+    summary_line = "Total duration: #{total_duration} in #{total_lines} lines"
+    text summary_line, size: @font_big, style: :bold
+    daily_hours = 8
+    working_days = total_duration.split(':').first.to_f / daily_hours
+    h,m,s = total_duration.split(':').map(&:to_i)
+    text "#{working_days} working days of #{daily_hours} hours (#{h/daily_hours} w.d. + #{h%daily_hours} h)"
   end
 
   def page_numbering

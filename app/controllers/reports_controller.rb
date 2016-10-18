@@ -9,8 +9,10 @@ class ReportsController < ApplicationController
     starting = format_date(params['starting_date'.to_sym])
     ending = format_date(params['ending_date'.to_sym])
     @activities = Activity.where('start >= ? and start <= ?', starting, ending).includes(:project, :task, :subtask, :user).order(:project_id, :start)
-
-# TODO user param[:filter] to extra filter type ilike
+    unless params[:filter].blank?
+      project_ids = Project.where("name ILIKE ?", "%#{params[:filter]}%").ids
+      @activities = @activities.where(project_id: project_ids)
+    end
 
     respond_to do |format|
       format.html { render json: @activities }
