@@ -8,7 +8,7 @@ class ReportsController < ApplicationController
   def activity_report
     starting = format_date(params['starting_date'.to_sym])
     ending = format_date(params['ending_date'.to_sym])
-    @activities = Activity.where('start >= ? and start <= ?', starting, ending).includes(:project, :task, :subtask, :user).order(:project_id, :task_id, :start)
+    @activities = Activity.where('start >= ? and start <= ?', starting, ending).includes(:project, :task).order(:project_id, :task_id, :start)
     unless params[:filter].blank?
       project_ids = Project.where("name ILIKE ?", "%#{params[:filter]}%").ids
       @activities = @activities.where(project_id: project_ids)

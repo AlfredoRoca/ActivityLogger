@@ -23,7 +23,8 @@ class ActivityReportPdf < Prawn::Document
     move_down 20
     print_list
     move_down 20
-    print_summary
+    print_activity_summary
+    print_summary_per_project
 
     page_numbering
   end
@@ -53,7 +54,7 @@ class ActivityReportPdf < Prawn::Document
     end
   end
 
-  def print_summary
+  def print_activity_summary
     total_duration = duration_to_s(@activities.sum(:duration))
     total_lines = @activities.size
     summary_line = "Total duration: #{total_duration} in #{total_lines} lines"
@@ -62,6 +63,15 @@ class ActivityReportPdf < Prawn::Document
     working_days = total_duration.split(':').first.to_f / daily_hours
     h,m,s = total_duration.split(':').map(&:to_i)
     text "#{working_days} working days of #{daily_hours} hours (#{h/daily_hours} w.d. + #{h%daily_hours} h)"
+  end
+
+  def print_summary_per_project
+    per_project_and_task_summary = @activities.order(:project_id, :task_id).group(:project_id, :task_id).sum(:duration).map{|activity| {project: Project.find(activity[0][0]), task: Task.find(activity[0][1]), duration: activity[1].to_i}}
+
+    per_project_and_task_summary.each do |summary|
+      text "#{summary[:project].name} #{summary[:task].name} #{duration_to_s(summary[:duration])}"
+    end
+    move_down 20
   end
 
   def page_numbering
