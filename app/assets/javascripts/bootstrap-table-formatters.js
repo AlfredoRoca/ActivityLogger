@@ -89,11 +89,35 @@ var setPickers = function () {
     return result;
   }
 
+  function toggleChargeableLinkFormatter(value, row) {
+    if (value) {
+      result = "<a href='" + url + row.id + "' onclick=\"toggleChargeable('" + row.id + "'); return false;\">Toggle chargeable</a>";
+    } else {
+      result = null;
+    }
+    return result;
+  }
+
+  function toggleChargeable(row) {
+    $.ajax({
+      method: "PUT",
+      url: url + row + '/toggle_chargeable'
+    })
+      .done(function(){
+        $('#table').bootstrapTable('refresh');
+      })
+      .fail(function(){
+        console.log("Toggle chargeable failed!");
+      })
+  }
+
   var bindEventsToTable = function () {
     var showPopupMenu = function (row) {
       $('#showPath').html(showLinkFormatter(true, row));
       $('#editPath').html(editLinkFormatter(true, row));
       $('#destroyPath').html(destroyLinkFormatter(true, row));
+      $('#toggleChargeable').html(toggleChargeableLinkFormatter(true, row));
+      $('#managmentModal .modal-title').html("Managment activity " + row.id);
       $('#managmentModal').modal('show');
     }
     $('#table').bootstrapTable({

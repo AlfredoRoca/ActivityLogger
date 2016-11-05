@@ -107,6 +107,12 @@ class ActivitiesController < ApplicationController
     end
   end
 
+  # request with ajax from popup in index
+  def toggle_chargeable
+    @activity = Activity.find_by(id: params[:activity_id])
+    @activity.update(chargeable: !@activity.chargeable)
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_activity

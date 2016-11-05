@@ -8,7 +8,9 @@ Rails.application.routes.draw do
   resources :users
   resources :subtasks
   resources :tasks
-  resources :activities, concerns: :paginatable
+  resources :activities, concerns: :paginatable do
+    put :toggle_chargeable
+  end
   resources :projects do
     member do
       get :update_activity_duration_per_gittag
