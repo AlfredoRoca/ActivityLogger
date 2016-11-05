@@ -19,7 +19,6 @@ config/database.yml
 config/secrets.yml
 config/deploy/staging.rb
 config/local_env.yml
-config/local_vars.yml
 
 REVISION
 
