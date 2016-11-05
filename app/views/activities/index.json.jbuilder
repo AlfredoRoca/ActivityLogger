@@ -6,6 +6,9 @@ json.array!(@activities) do |activity|
   json.user_id activity.user.id
   json.user_name activity.user.name
   json.duration duration_to_s(activity.duration)
+  json.chargeable activity.chargeable
+  json.charged activity.charged
+  json.charged_date activity.charged_date
   json.url activity_url(activity, format: :json)
   json.showUrl activity_path(activity) 
   json.editUrl edit_activity_path(activity) 

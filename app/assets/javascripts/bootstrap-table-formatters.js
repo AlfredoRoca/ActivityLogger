@@ -38,9 +38,24 @@ var setPickers = function () {
   };
 
 
+  function booleanFormatter(value, row) {
+    var result;
+    if (!value) { result = ""; } else { if (value == true) { result = "\u2713"; } else { result = ""; } }
+    return result;
+  }
+
   function dateFormatter(value, row) {
     if (value) { 
       result = moment(value).format("DD/MM/YYYY HH:mm"); 
+    } else { 
+      result = ""; 
+    }
+    return result;
+  }
+
+  function onlyDateFormatter(value, row) {
+    if (value) { 
+      result = moment(value).format("DD/MM/YYYY"); 
     } else { 
       result = ""; 
     }
@@ -115,6 +130,8 @@ var setPickers = function () {
 
           params['starting_date'] = $('#starting_date').val();
           params['ending_date'] = $('#ending_date').val();
+          params['chargeable'] = $('#chargeable').val();
+          params['charged'] = $('#charged').val();
 
 
       return params;

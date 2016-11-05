@@ -54,7 +54,7 @@
                 </span>
             </div>
         </div>
-      </div>        
+      </div>
     </div>
   </div>
 <!-- date-time pickers -->
@@ -64,6 +64,31 @@
     <%= f.text_field :description, size: "50" %>
   </div>
 
+  <div class="field">
+    <%= f.label :chargeable %><br>
+    <%= f.check_box :chargeable %>
+  </div>
+
+  <div class="field">
+    <%= f.label :charged %><br>
+    <%= f.check_box :charged %>
+  </div>
+
+  <div class="row">
+    <div class="col-md-3 col-md-offset-0 col-sm-4 col-sm-offset-0">
+      <div class="datetime-pickers-group">
+        <div class="form-group">
+          <%= f.label :charged_date %>
+            <div class='input-group date' id='datetimepicker_charged_date'>
+                <input type='text' class="form-control" id="activity_charged_date" name="activity[charged_date]" />
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <div class="actions">
     <%= f.submit t :update %>

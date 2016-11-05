@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160611143959) do
+ActiveRecord::Schema.define(version: 20161105090106) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -29,6 +29,9 @@ ActiveRecord::Schema.define(version: 20160611143959) do
     t.string   "description"
     t.integer  "week"
     t.integer  "year"
+    t.boolean  "chargeable",   default: true
+    t.boolean  "charged",      default: false
+    t.datetime "charged_date"
   end
 
   add_index "activities", ["project_id"], name: "index_activities_on_project_id", using: :btree
@@ -94,6 +97,7 @@ ActiveRecord::Schema.define(version: 20160611143959) do
     t.string   "code"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "alias"
   end
 
   create_table "teams", force: :cascade do |t|
@@ -109,7 +113,6 @@ ActiveRecord::Schema.define(version: 20160611143959) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "name"
-    t.integer  "role_id"
     t.boolean  "admin",                  default: false
     t.boolean  "leader",                 default: false
     t.string   "encrypted_password",     default: "",    null: false
@@ -133,7 +136,6 @@ ActiveRecord::Schema.define(version: 20160611143959) do
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
-  add_index "users", ["role_id"], name: "index_users_on_role_id", using: :btree
   add_index "users", ["unlock_token"], name: "index_users_on_unlock_token", unique: true, using: :btree
 
   add_foreign_key "gittags", "projects"

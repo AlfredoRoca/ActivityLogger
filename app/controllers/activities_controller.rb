@@ -29,6 +29,8 @@ class ActivitiesController < ApplicationController
     params['ending_date'.to_sym] = Time.now.strftime(date_time_picker_format) if params['ending_date'.to_sym].blank?
     starting = format_date(params['starting_date'.to_sym])
     ending = format_date(params['ending_date'.to_sym])
+    chargeable = params[:chargeable].upcase unless params[:chargeable].nil?
+    charged = params[:charged].upcase unless params[:charged].nil?
 
     @starting_date = params[:starting_date]
     @ending_date = params[:ending_date]
@@ -36,6 +38,10 @@ class ActivitiesController < ApplicationController
     if request.path_parameters[:format] == 'json'
       if current_user.admin
         @activities = Activity.where('start >= ? and start <= ?', starting, ending).includes(:project, :task, :subtask, :user)
+        @activities = @activities.chargeables if chargeable == "YES"
+        @activities = @activities.not_chargeable if chargeable == "NO"
+        @activities = @activities.chargeds if charged == "YES"
+        @activities = @activities.not_charged if charged == "NO"
       else
         @activities = Activity.for_user(current_user.id).includes(:project, :task, :subtask, :user)
         # @activities = Activity.for_user(current_user.id).ordered_last_first.page params[:page]
@@ -109,6 +115,6 @@ class ActivitiesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def activity_params
-      params.require(:activity).permit(:project_id, :task_id, :subtask_id, :user_id, :start, :ended, :duration, :description, :week, :year)
+      params.require(:activity).permit(:project_id, :task_id, :subtask_id, :user_id, :start, :ended, :duration, :description, :week, :year, :chargeable, :charged, :charged_date)
     end
 end

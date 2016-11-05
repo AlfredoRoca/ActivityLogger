@@ -34,6 +34,11 @@ class Activity < ActiveRecord::Base
 
   scope :ordered_last_first, -> { order('start DESC, project_id ASC, task_id ASC, user_id ASC') }
 
+  scope :chargeables, -> { where(chargeable: true) }
+  scope :chargeds, -> { where(charged: true) }
+  scope :not_chargeable, -> { where(chargeable: false) }
+  scope :not_charged, -> { where(charged: false) }
+
   paginates_per 15
 
   before_save :calc_duration

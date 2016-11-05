@@ -25,12 +25,18 @@ var setupDateTimePickers = function (start, ended) {
     useCurrent: false,
     locale: 'es'
   });
-  // $("#datetimepicker_start").on("dp.change", function (e) {
-  //     $('#datetimepicker_ended').data("DateTimePicker").minDate(e.date);
-  // });
-  // $("#datetimepicker_ended").on("dp.change", function (e) {
-  //     $('#datetimepicker_start').data("DateTimePicker").maxDate(e.date);
-  // });
+  $('#datetimepicker_charged_date').datetimepicker({
+    format: "D/M/YYYY",
+    collapse: false,
+    sideBySide: true,
+    calendarWeeks: true,
+    showTodayButton: true,
+    showClear: true,
+    showClose: true,
+    stepping: 15,
+    useCurrent: false,
+    locale: 'es'
+  });
 
 }
 

@@ -33,12 +33,17 @@
         <%= hidden_field_tag :filter %>
       </div>
       <div class="form-group">
+        Chargeable? <%= select_tag "chargeable", '<option>ALL</option><option>Yes</option><option>No</option>'.html_safe %>
+      </div>
+      <div class="form-group">
+        Charged? <%= select_tag "charged", '<option>ALL</option><option>Yes</option><option>No</option>'.html_safe %>
+      </div>
+      <div class="form-group">
         <%= button_tag 'Filter_by_dates', onclick: "$('#table').bootstrapTable('refresh');return false;", class: "btn btn-primary" %>
         <%= submit_tag "Print PDF Report", onclick: "$('#filter').val($('.search input:text').val()); ", class: "btn btn-default" %>
       </div>
     <% end %>
   </div>
-
 
 </div>
 
@@ -74,6 +79,9 @@
         <th data-field="start"        data-sortable=true data-searchable=true data-formatter=dateFormatter>Start</th>
         <th data-field="ended"        data-sortable=true data-searchable=true data-formatter=dateFormatter>End</th>
         <th data-field="duration"     data-sortable=true data-searchable=true >Duration</th>
+        <th data-field="chargeable"     data-sortable=true data-searchable=true data-formatter=booleanFormatter >Chargeable?</th>
+        <th data-field="charged"     data-sortable=true data-searchable=true data-formatter=booleanFormatter >Charged?</th>
+        <th data-field="charged_date" data-sortable=true data-searchable=true  data-formatter=onlyDateFormatter>Charged on</th>
         <th data-field="description"  data-sortable=true data-searchable=true >Description</th>
       </tr>
     </thead>
@@ -87,3 +95,4 @@
 </table>
 
 <script>bindEventsToTable();</script>
+
