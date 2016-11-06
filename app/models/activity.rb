@@ -45,6 +45,7 @@ class Activity < ActiveRecord::Base
   scope :chargeds, -> { where(charged: true) }
   scope :not_chargeable, -> { where(chargeable: false) }
   scope :not_charged, -> { where(charged: false) }
+  scope :with_charged_code, -> (code) { where(charged_code: code) }
 
   paginates_per 15
 
@@ -97,10 +98,11 @@ class Activity < ActiveRecord::Base
     counter
   end
 
-  def self.filter(starting, ending, chargeable, charged, project_id)
+  def self.filter(starting, ending, chargeable, charged, project_id, charged_code)
 p "**** filter", project_id
     activities = Activity.where('start >= ? and start <= ?', starting, ending).includes(:project, :task, :subtask)
     activities = activities.for_project(project_id) unless project_id.blank?
+    activities = activities.with_charged_code(charged_code) unless charged_code.blank?
     activities = activities.chargeables if chargeable == "YES"
     activities = activities.not_chargeable if chargeable == "NO"
     activities = activities.chargeds if charged == "YES"

@@ -27,28 +27,41 @@
   <!-- data load filters -->
   <div class="col-md-12 centered">
     <%= form_tag activity_report_path(format: :pdf), method: 'get', class: 'form-inline' do %>
-      <div class="form-group">
-        <%= text_field_tag :starting_date, @starting_date, id: "starting_date", class: "form-control" %>
-        <%= text_field_tag :ending_date, @ending_date, id: "ending_date", class: "form-control" %>
-        <%= hidden_field_tag :filter %>
-      </div>
-      <div class="form-group">
-        Project <%= collection_select nil, :project, Project.open.alfa_order, :id, :name, {include_blank: true}, html_options = { onchange: "$('#table').bootstrapTable('refresh');"} %>
-      </div>
-      <div class="form-group">
-        Chargeable? <%= select_tag "chargeable", '<option>ALL</option><option>Yes</option><option>No</option>'.html_safe, {onchange: "$('#table').bootstrapTable('refresh');"} %>
-      </div>
-      <div class="form-group">
-        Charged? <%= select_tag "charged", '<option>ALL</option><option>Yes</option><option>No</option>'.html_safe, {onchange: "$('#table').bootstrapTable('refresh');"} %>
-      </div>
-      <div class="form-group">
-        <%= button_tag 'Apply filter', onclick: "$('#table').bootstrapTable('refresh');return false;", class: "btn btn-primary" %>
+      <div class="well">
+        <div class="form-group">
+          <%= text_field_tag :starting_date, @starting_date, id: "starting_date", class: "form-control" %>
+          <%= text_field_tag :ending_date, @ending_date, id: "ending_date", class: "form-control" %>
+          <%= hidden_field_tag :filter %>
+        </div>
+        <div class="form-group">
+          Project <%= collection_select nil, :project, Project.open.alfa_order, :id, :name, {include_blank: true}, html_options = { onchange: "$('#table').bootstrapTable('refresh');"} %>
+        </div>
+        <div class="form-group">
+          Chargeable? <%= select_tag "chargeable", '<option>ALL</option><option>Yes</option><option>No</option>'.html_safe, {onchange: "$('#table').bootstrapTable('refresh');"} %>
+        </div>
+        <div class="form-group">
+          Charged? <%= select_tag "charged", '<option>ALL</option><option>Yes</option><option>No</option>'.html_safe, {onchange: "$('#table').bootstrapTable('refresh');"} %>
+        </div>
+        
+        <div class="form-group">
+          Charged_code: <%= text_field_tag :charged_code, nil, id: "charged_code", class: "form-control", onchange: "$('#table').bootstrapTable('refresh');return false;" %>
+        </div>
 
-        <%= submit_tag "Print PDF Report", onclick: "$('#filter').val($('.search input:text').val()); ", class: "btn btn-default" %>
+        <div class="form-group">
+          <%= button_tag 'Apply filter', onclick: "$('#table').bootstrapTable('refresh');return false;", class: "btn btn-primary" %>
+        </div>
+      </div>
 
-        <%= button_tag "Charge filtered activities!", id: 'button_charge', onclick: "$('#filter').val($('.search input:text').val()); charge_activities(); return false;", class: "btn btn-danger" %>
-        <%= text_field_tag :charged_date, nil, id: "charged_date", class: "form-control" %>
-        <div></div>
+      <div class="well">
+        <div class="form-group">
+          <label">Detailed report? <%= check_box_tag "detailed" %></label>
+          <%= submit_tag "Print PDF Report", onclick: "$('#filter').val($('.search input:text').val()); ", class: "btn btn-default" %>
+        </div>
+
+        <div class="form-group" style="margin-left: 10em;">
+          <%= text_field_tag :charged_date, nil, id: "charged_date", class: "form-control" %>
+          <%= button_tag "Charge filtered activities!", id: 'button_charge', onclick: "$('#filter').val($('.search input:text').val()); charge_activities(); return false;", class: "btn btn-danger" %>
+        </div>
       </div>
     <% end %>
   </div>
@@ -112,7 +125,7 @@
   ////////////////////////////////////////////////////////////
   function charge_activities() {
     var doCharge = function() {
-      var filterString = {starting_date: $('#starting_date').val(), ending_date: $('#ending_date').val(), chargeable: $('#chargeable').val(), charged: $('#charged').val(), filter: $('#filter').val(), charged_date: $('#charged_date').val(), project: $('#_project').val()};
+      var filterString = {starting_date: $('#starting_date').val(), ending_date: $('#ending_date').val(), chargeable: $('#chargeable').val(), charged: $('#charged').val(), filter: $('#filter').val(), charged_date: $('#charged_date').val(), project: $('#_project').val(), charged_code: $('#charged_code').val()};
       var url = '<%= charge_activities_path %>';
       
       $.ajax({

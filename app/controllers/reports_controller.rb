@@ -10,20 +10,22 @@ class ReportsController < ApplicationController
     ending = format_date(params['ending_date'.to_sym])
     chargeable = params[:chargeable].upcase unless params[:chargeable].nil?
     charged = params[:charged].upcase unless params[:charged].nil?
+    charged_code = params[:charged_code]
     project_id = params[:project]
-    @activities = Activity.filter(starting, ending, chargeable, charged, project_id)
+    detailed = params[:detailed] == "1"
+    @activities = Activity.filter(starting, ending, chargeable, charged, project_id, charged_code)
     # unless params[:filter].blank?
     #   project_ids = Project.where("name ILIKE ?", "%#{params[:filter]}%").ids
     #   @activities = @activities.where(project_id: project_ids)
     # end
-    @filter_condition = {starting: starting, ending: ending, chargeable: chargeable, charged: charged, project: project_id}
+    @filter_condition = {starting: starting, ending: ending, chargeable: chargeable, charged: charged, charged_code: charged_code, project: project_id}
     @activities = @activities.order(:project_id, :task_id)
 
     respond_to do |format|
       format.html { render json: @activities }
       format.json
       format.pdf do
-        pdf = ActivityReportPdf.new(@activities, @filter_condition)
+        pdf = ActivityReportPdf.new(@activities, @filter_condition, detailed)
         send_data pdf.render, file_name: 'activity_report.pdf', type: 'application/pdf'
       end
     end

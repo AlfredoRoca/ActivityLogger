@@ -31,13 +31,14 @@ class ActivitiesController < ApplicationController
     ending = format_date(params['ending_date'.to_sym])
     chargeable = params[:chargeable].upcase unless params[:chargeable].nil?
     charged = params[:charged].upcase unless params[:charged].nil?
+    charged_code = params[:charged_code]
     project_id = params[:project]
     @starting_date = params[:starting_date]
     @ending_date = params[:ending_date]
 
     if request.path_parameters[:format] == 'json'
       if current_user.admin
-        @activities = Activity.filter(starting, ending, chargeable, charged, project_id)
+        @activities = Activity.filter(starting, ending, chargeable, charged, project_id, charged_code)
           # @activities = Activity.where('start >= ? and start <= ?', starting, ending).includes(:project, :task, :subtask, :user)
           # @activities = @activities.chargeables if chargeable == "YES"
           # @activities = @activities.not_chargeable if chargeable == "NO"
@@ -59,8 +60,9 @@ class ActivitiesController < ApplicationController
     chargeable = params[:chargeable].upcase unless params[:chargeable].nil?
     charged = params[:charged].upcase unless params[:charged].nil?
     charged_date = params[:charged_date]
+    charged_code = params[:charged_code]
     project_id = params[:project]
-    activities = Activity.filter(starting, ending, chargeable, charged, project_id)
+    activities = Activity.filter(starting, ending, chargeable, charged, project_id, charged_code)
     # unless params[:filter].blank?
     #   project_ids = Project.where("name ILIKE ?", "%#{params[:filter]}%").ids
     #   activities = activities.where(project_id: project_ids)

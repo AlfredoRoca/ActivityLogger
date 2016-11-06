@@ -150,6 +150,8 @@ var setPickers = function () {
       params['chargeable'] = $('#chargeable').val();
       params['charged'] = $('#charged').val();
       params['project'] = $('#_project').val();
+      params['detailed'] = $('#detailed').val();
+      params['charged_code'] = $('#charged_code').val();
       return params;
   }
 
