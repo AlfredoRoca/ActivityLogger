@@ -25,7 +25,7 @@ class ActivitiesController < ApplicationController
   def index
     # The code in the bootstrap-tables makes ajax call
     date_time_picker_format = "%d/%m/%Y %H:%M"
-    params['starting_date'.to_sym] = (Time.now - 1.week).strftime(date_time_picker_format) if params['starting_date'.to_sym].blank?
+    params['starting_date'.to_sym] = (Time.now - 1.month).strftime(date_time_picker_format) if params['starting_date'.to_sym].blank?
     params['ending_date'.to_sym] = Time.now.strftime(date_time_picker_format) if params['ending_date'.to_sym].blank?
     starting = format_date(params['starting_date'.to_sym])
     ending = format_date(params['ending_date'.to_sym])
