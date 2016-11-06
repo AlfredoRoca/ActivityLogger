@@ -49,6 +49,7 @@ gem 'thin'
 
 # pdf generator
 gem 'prawn'
+gem 'prawn-table'
 
 # paginator
 gem 'kaminari'

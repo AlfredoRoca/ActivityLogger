@@ -37,11 +37,12 @@ class ActivitiesController < ApplicationController
 
     if request.path_parameters[:format] == 'json'
       if current_user.admin
-        @activities = Activity.where('start >= ? and start <= ?', starting, ending).includes(:project, :task, :subtask, :user)
-        @activities = @activities.chargeables if chargeable == "YES"
-        @activities = @activities.not_chargeable if chargeable == "NO"
-        @activities = @activities.chargeds if charged == "YES"
-        @activities = @activities.not_charged if charged == "NO"
+        @activities = Activity.filter(starting, ending, chargeable, charged)
+          # @activities = Activity.where('start >= ? and start <= ?', starting, ending).includes(:project, :task, :subtask, :user)
+          # @activities = @activities.chargeables if chargeable == "YES"
+          # @activities = @activities.not_chargeable if chargeable == "NO"
+          # @activities = @activities.chargeds if charged == "YES"
+          # @activities = @activities.not_charged if charged == "NO"
       else
         @activities = Activity.for_user(current_user.id).includes(:project, :task, :subtask, :user)
         # @activities = Activity.for_user(current_user.id).ordered_last_first.page params[:page]

@@ -1,6 +1,7 @@
+require 'prawn/table'
 class ActivityReportPdf < Prawn::Document
   include ApplicationHelper
-  def initialize(activities, starting, ending)
+  def initialize(activities, filter)
     super(
       info: {
         Title: "Activity report",
@@ -11,54 +12,91 @@ class ActivityReportPdf < Prawn::Document
         CreationDate: Time.zone.now
         },
       page_size: "A4",
-      page_layout: :portrait,
+      # page_layout: :portrait,
+      page_layout: :landscape,
       left_margin: 50,
     )
 
     @activities = activities
-    @starting = starting
-    @ending = ending
+    @starting = filter[:starting]
+    @ending = filter[:ending]
+    @chargeable = filter[:chargeable]
+    @charged = filter[:charged]
     settings
     header
     move_down 20
+    font_size @font_little
     print_list
     move_down 20
-    print_activity_summary
     print_summary_per_project
+    move_down 20
+    print_activity_summary
 
     page_numbering
   end
 
   def settings
-    @font_title = 40
-    @font_subtitle = 30
+    @font_title = 30
+    @font_subtitle = 26
     @font_big = 20
-    @font_normal = 14
+    @font_normal = 12
     @font_little = 10
+    @font_tiny = 8
+    @tables_width_wide = 775
+    @tables_width_narrow = 500
   end
  
   def header
-    text "Activities started between #{localize_date(DateTime.parse(@starting))} and #{localize_date(DateTime.parse(@ending))}", size: @font_subtitle, style: :bold
+    text "Activities started between #{localize_date(DateTime.parse(@starting))} and #{localize_date(DateTime.parse(@ending))}", size: @font_big, style: :bold
+    text "Other conditions: chargeable: #{@chargeable}, charged: #{@charged}", size: @font_normal
   end
  
+  def table_header_for_activities_list
+    [
+      "Project",
+      "Task",
+      "Subtask",
+      "Start",
+      "Finish",
+      "Duration",
+      "Description"
+    ]      
+  end
 
   def print_list
-    text "Activities", size: @font_big
-    @activities.each do |activity|
-      line_text = ""
-      line_text += "#{activity.project.try(:name)} "
-      line_text += "#{activity.task.try(:name)} "
-      line_text += "#{activity.subtask.try(:name)} "
-      line_text += "#{localize_date(activity.start)} - #{localize_date(activity.ended)} = #{duration_to_s(activity.duration)} #{activity.description}"
-      text line_text
+    text "Activities", size: @font_normal, style: :bold
+    data = []
+    data[0] = table_header_for_activities_list
+    data = populate_table_for_activities_list(data, @activities)
+    table(data) do
+      header = true
+      width = @tables_width_wide
+      cells.borders = [:bottom]
+      cells.style = {overflow: :shrink_to_fit, min_font_size: @font_tiny,}
+      row(0).font_style = :bold
     end
+  end
+
+  def populate_table_for_activities_list(data, activities)
+    activities.each do |activity|
+      data << [
+        activity.project.try(:name),
+        activity.task.try(:name),
+        activity.subtask.try(:name),
+        localize_date(activity.start),
+        localize_date(activity.ended),
+        duration_to_s(activity.duration),
+        activity.description
+      ]
+    end
+    data
   end
 
   def print_activity_summary
     total_duration = duration_to_s(@activities.sum(:duration))
     total_lines = @activities.size
     summary_line = "Total duration: #{total_duration} in #{total_lines} lines"
-    text summary_line, size: @font_big, style: :bold
+    text summary_line, size: @font_normal, style: :bold
     daily_hours = 8
     working_days = total_duration.split(':').first.to_f / daily_hours
     h,m,s = total_duration.split(':').map(&:to_i)
@@ -66,15 +104,44 @@ class ActivityReportPdf < Prawn::Document
   end
 
   def print_summary_per_project
-    per_project_and_task_summary = @activities.order(:project_id, :task_id).group(:project_id, :task_id).sum(:duration).map{|activity| {project: Project.find(activity[0][0]), task: Task.find(activity[0][1]), duration: activity[1].to_i}}
+    text "Summary per project", size: @font_normal, style: :bold
+    activities_summary = @activities.order(:project_id, "activities.task_id").group(:project_id, "activities.task_id").sum(:duration)
+    per_project_and_task_summary = activities_summary.map{|activity| {project: Project.find(activity[0][0]), task: Task.find(activity[0][1]), duration: activity[1].to_i}}
 
-    per_project_and_task_summary.each do |summary|
-      text "#{summary[:project].name} #{summary[:task].name} #{duration_to_s(summary[:duration])}"
+    draw_horizontal_line
+    data = []
+    data[0] = table_header_for_summary_per_project
+    data = populate_table_for_summary_per_project(data, per_project_and_task_summary)
+    table(data) do
+      header = true
+      width = @tables_width_narrow
+      cells.borders = [:bottom]
+      cells.style = {overflow: :shrink_to_fit, min_font_size: @font_tiny}
+      row(0).font_style = :bold
     end
-    move_down 20
+
   end
 
-  def page_numbering
+  def table_header_for_summary_per_project
+    [
+      "Project",
+      "Task",
+      "Duration"
+    ]      
+  end
+
+  def populate_table_for_summary_per_project(data, activities_summary)
+    activities_summary.each do |summary|
+      data << [
+        summary[:project].name,
+        summary[:task].name,
+        duration_to_s(summary[:duration])
+      ]
+    end
+    data
+  end
+
+def page_numbering
     string = "Página <page> de <total>"
     options = { :at => [bounds.right - 150, 0],
     :width => 150,
@@ -82,6 +149,14 @@ class ActivityReportPdf < Prawn::Document
     number_pages string, options
   end
   
+  def draw_horizontal_line
+    # text "\n"
+    stroke do
+      line_width = 1
+      horizontal_rule
+    end
+    text "\n"
+  end
 
 
 end

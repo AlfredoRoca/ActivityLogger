@@ -39,7 +39,7 @@
         Charged? <%= select_tag "charged", '<option>ALL</option><option>Yes</option><option>No</option>'.html_safe %>
       </div>
       <div class="form-group">
-        <%= button_tag 'Filter_by_dates', onclick: "$('#table').bootstrapTable('refresh');return false;", class: "btn btn-primary" %>
+        <%= button_tag 'Apply filter', onclick: "$('#table').bootstrapTable('refresh');return false;", class: "btn btn-primary" %>
         <%= submit_tag "Print PDF Report", onclick: "$('#filter').val($('.search input:text').val()); ", class: "btn btn-default" %>
       </div>
     <% end %>

@@ -90,6 +90,15 @@ class Activity < ActiveRecord::Base
     counter
   end
 
+  def self.filter(starting, ending, chargeable, charged)
+    activities = Activity.where('start >= ? and start <= ?', starting, ending).includes(:project, :task, :subtask)
+    activities = activities.chargeables if chargeable == "YES"
+    activities = activities.not_chargeable if chargeable == "NO"
+    activities = activities.chargeds if charged == "YES"
+    activities = activities.not_charged if charged == "NO"
+    return activities
+  end
+
   private
 
     def self.save_upload(uploaded_io)
