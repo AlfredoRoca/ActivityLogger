@@ -9,6 +9,7 @@ json.array!(@activities) do |activity|
   json.chargeable activity.chargeable
   json.charged activity.charged
   json.charged_date activity.charged_date
+  json.charged_code activity.charged_code
   json.url activity_url(activity, format: :json)
   json.showUrl activity_path(activity) 
   json.editUrl edit_activity_path(activity) 

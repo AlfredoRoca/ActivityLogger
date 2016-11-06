@@ -29,9 +29,11 @@
     <p id="alert"><h3><%= flash[:alert] %></h3></p>
 	</div>
 
-<div class="container">
+<div class="container-fluid">
   <div class="row">
-    <%= yield %>
+    <div class="col-xs-12">
+      <%= yield %>
+    </div>
   </div>
 </div>
 

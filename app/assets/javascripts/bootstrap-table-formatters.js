@@ -20,8 +20,8 @@ var setPickers = function () {
         locale: 'es',
         collapse: true,
         sideBySide: true,
-        // viewDate: true,
         format: 'DD/MM/YYYY HH:mm',
+        stepping: 15
     });
     $('#ending_date').datetimepicker({
         calendarWeeks: true,
@@ -32,8 +32,21 @@ var setPickers = function () {
         locale: 'es',
         collapse: true,
         sideBySide: true,
-        // viewDate: true,
         format: 'DD/MM/YYYY HH:mm',
+        stepping: 15
+    });
+    $('#charged_date').datetimepicker({
+        calendarWeeks: true,
+        showTodayButton: true,
+        showClear: true,
+        showClose: true,
+        useCurrent: true,
+        defaultDate: moment(),
+        locale: 'es',
+        collapse: true,
+        sideBySide: true,
+        format: 'DD/MM/YYYY HH:mm',
+        stepping: 15
     });
   };
 
@@ -132,32 +145,11 @@ var setPickers = function () {
 
   function queryParams() {
       var params = new Object();
-      // emergencies and recordings controllers set the vars to fill these ellements
-      // these are necessary to set pickers on load (the only way i can make it work
-      // if they exists, params get their values and updates pickers
-      // if not params get pickers values
-
-      // var start_at = $('#start_at');
-      // var end_at = $('#end_at');
-      // if (start_at.length > 0) {
-      //     params['starting_date'] = start_at.data('start_at');
-      //     $('#starting_date').val(params['starting_date']);
-      // } else {
-      //     params['starting_date'] = $('#starting_date').val();
-      // }
-      // if (end_at.length > 0) {
-      //     params['ending_date'] = end_at.data('end_at');
-      //     $('#ending_date').val(params['ending_date']);
-      // } else {
-      //     params['ending_date'] = $('#ending_date').val();
-      // }
-
-          params['starting_date'] = $('#starting_date').val();
-          params['ending_date'] = $('#ending_date').val();
-          params['chargeable'] = $('#chargeable').val();
-          params['charged'] = $('#charged').val();
-
-
+      params['starting_date'] = $('#starting_date').val();
+      params['ending_date'] = $('#ending_date').val();
+      params['chargeable'] = $('#chargeable').val();
+      params['charged'] = $('#charged').val();
+      params['project'] = $('#_project').val();
       return params;
   }
 

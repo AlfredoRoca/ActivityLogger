@@ -7,6 +7,7 @@
 #  code       :string
 #  created_at :datetime
 #  updated_at :datetime
+#  alias      :string
 #
 
 require 'rails_helper'

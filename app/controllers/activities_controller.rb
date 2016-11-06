@@ -23,7 +23,7 @@ class ActivitiesController < ApplicationController
   # GET /activities
   # GET /activities.json
   def index
-  # The code in the bootstrap-tables makes ajax call
+    # The code in the bootstrap-tables makes ajax call
     date_time_picker_format = "%d/%m/%Y %H:%M"
     params['starting_date'.to_sym] = (Time.now - 1.week).strftime(date_time_picker_format) if params['starting_date'.to_sym].blank?
     params['ending_date'.to_sym] = Time.now.strftime(date_time_picker_format) if params['ending_date'.to_sym].blank?
@@ -31,13 +31,13 @@ class ActivitiesController < ApplicationController
     ending = format_date(params['ending_date'.to_sym])
     chargeable = params[:chargeable].upcase unless params[:chargeable].nil?
     charged = params[:charged].upcase unless params[:charged].nil?
-
+    project_id = params[:project]
     @starting_date = params[:starting_date]
     @ending_date = params[:ending_date]
 
     if request.path_parameters[:format] == 'json'
       if current_user.admin
-        @activities = Activity.filter(starting, ending, chargeable, charged)
+        @activities = Activity.filter(starting, ending, chargeable, charged, project_id)
           # @activities = Activity.where('start >= ? and start <= ?', starting, ending).includes(:project, :task, :subtask, :user)
           # @activities = @activities.chargeables if chargeable == "YES"
           # @activities = @activities.not_chargeable if chargeable == "NO"
@@ -50,6 +50,29 @@ class ActivitiesController < ApplicationController
     else
       @activities = Activity.none
     end
+  end
+
+  # POST '/activities/charge(.:format)' by ajax from index page
+  def charge
+    starting = format_date(params['starting_date'.to_sym])
+    ending = format_date(params['ending_date'.to_sym])
+    chargeable = params[:chargeable].upcase unless params[:chargeable].nil?
+    charged = params[:charged].upcase unless params[:charged].nil?
+    charged_date = params[:charged_date]
+    project_id = params[:project]
+    activities = Activity.filter(starting, ending, chargeable, charged, project_id)
+    # unless params[:filter].blank?
+    #   project_ids = Project.where("name ILIKE ?", "%#{params[:filter]}%").ids
+    #   activities = activities.where(project_id: project_ids)
+    # end
+    filter_condition = {starting: starting, ending: ending, chargeable: chargeable, charged: charged, project: project_id}
+    activities = activities.order(:project_id, :task_id)
+    quantity = activities.size
+    charged_code = generate_random_string
+    activities.update_all(charged: true, charged_code: charged_code, charged_date: charged_date.in_time_zone, updated_at: DateTime.now)
+    activities.reload
+    response = {result: 'updated', quantity: quantity, charged_code: charged_code, charged_date: charged_date}
+    render json: response.to_json
   end
 
   # GET /activities/1
@@ -122,6 +145,6 @@ class ActivitiesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def activity_params
-      params.require(:activity).permit(:project_id, :task_id, :subtask_id, :user_id, :start, :ended, :duration, :description, :week, :year, :chargeable, :charged, :charged_date)
+      params.require(:activity).permit(:project_id, :task_id, :subtask_id, :user_id, :start, :ended, :duration, :description, :week, :year, :chargeable, :charged, :charged_date, :charged_code)
     end
 end

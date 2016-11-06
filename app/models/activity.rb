@@ -2,16 +2,23 @@
 #
 # Table name: activities
 #
-#  id         :integer          not null, primary key
-#  project_id :integer
-#  task_id    :integer
-#  subtask_id :integer
-#  user_id    :integer
-#  created_at :datetime
-#  updated_at :datetime
-#  start      :datetime
-#  ended      :datetime
-#  duration   :decimal(, )
+#  id           :integer          not null, primary key
+#  project_id   :integer
+#  task_id      :integer
+#  subtask_id   :integer
+#  user_id      :integer
+#  created_at   :datetime
+#  updated_at   :datetime
+#  start        :datetime
+#  ended        :datetime
+#  duration     :decimal(, )
+#  description  :string
+#  week         :integer
+#  year         :integer
+#  chargeable   :boolean          default(TRUE)
+#  charged      :boolean          default(FALSE)
+#  charged_date :datetime
+#  charged_code :string           default("")
 #
 
 class Activity < ActiveRecord::Base
@@ -90,8 +97,10 @@ class Activity < ActiveRecord::Base
     counter
   end
 
-  def self.filter(starting, ending, chargeable, charged)
+  def self.filter(starting, ending, chargeable, charged, project_id)
+p "**** filter", project_id
     activities = Activity.where('start >= ? and start <= ?', starting, ending).includes(:project, :task, :subtask)
+    activities = activities.for_project(project_id) unless project_id.blank?
     activities = activities.chargeables if chargeable == "YES"
     activities = activities.not_chargeable if chargeable == "NO"
     activities = activities.chargeds if charged == "YES"

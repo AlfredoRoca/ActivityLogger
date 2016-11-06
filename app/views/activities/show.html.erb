@@ -38,6 +38,7 @@
 <p><%= label_tag :charged %> <%= check_box_tag nil, nil, @activity.charged, disabled: true %></p>
 
 <p><%= label_tag :charged_date %> <%= localize_date_only_date @activity.charged_date %></p>
+<p><%= label_tag :charged_code %> <%= @activity.charged_code %></p>
 
 <%= link_to 'Edit', edit_activity_path(@activity) %> |
 <%= link_to 'Back', activities_path %>

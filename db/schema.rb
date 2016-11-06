@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161105090106) do
+ActiveRecord::Schema.define(version: 20161106104036) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -32,6 +32,7 @@ ActiveRecord::Schema.define(version: 20161105090106) do
     t.boolean  "chargeable",   default: true
     t.boolean  "charged",      default: false
     t.datetime "charged_date"
+    t.string   "charged_code", default: ""
   end
 
   add_index "activities", ["project_id"], name: "index_activities_on_project_id", using: :btree

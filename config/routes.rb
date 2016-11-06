@@ -10,6 +10,9 @@ Rails.application.routes.draw do
   resources :tasks
   resources :activities, concerns: :paginatable do
     put :toggle_chargeable
+    collection do
+      post :charge
+    end
   end
   resources :projects do
     member do

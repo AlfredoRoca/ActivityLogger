@@ -22,6 +22,7 @@ class ActivityReportPdf < Prawn::Document
     @ending = filter[:ending]
     @chargeable = filter[:chargeable]
     @charged = filter[:charged]
+    @project = filter[:project_id]
     settings
     header
     move_down 20
@@ -48,7 +49,7 @@ class ActivityReportPdf < Prawn::Document
  
   def header
     text "Activities started between #{localize_date(DateTime.parse(@starting))} and #{localize_date(DateTime.parse(@ending))}", size: @font_big, style: :bold
-    text "Other conditions: chargeable: #{@chargeable}, charged: #{@charged}", size: @font_normal
+    text "Other conditions: chargeable: #{@chargeable}, charged: #{@charged}, project: #{@project}", size: @font_normal
   end
  
   def table_header_for_activities_list
@@ -65,6 +66,7 @@ class ActivityReportPdf < Prawn::Document
 
   def print_list
     text "Activities", size: @font_normal, style: :bold
+    draw_horizontal_line
     data = []
     data[0] = table_header_for_activities_list
     data = populate_table_for_activities_list(data, @activities)

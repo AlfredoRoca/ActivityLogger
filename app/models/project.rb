@@ -6,6 +6,8 @@
 #  name       :string
 #  created_at :datetime
 #  updated_at :datetime
+#  closed     :boolean
+#  alias      :string
 #
 
 class Project < ActiveRecord::Base

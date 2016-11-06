@@ -10,12 +10,13 @@ class ReportsController < ApplicationController
     ending = format_date(params['ending_date'.to_sym])
     chargeable = params[:chargeable].upcase unless params[:chargeable].nil?
     charged = params[:charged].upcase unless params[:charged].nil?
-    @activities = Activity.filter(starting, ending, chargeable, charged)
-    @filter_condition = {starting: starting, ending: ending, chargeable: chargeable, charged: charged}
-    unless params[:filter].blank?
-      project_ids = Project.where("name ILIKE ?", "%#{params[:filter]}%").ids
-      @activities = @activities.where(project_id: project_ids)
-    end
+    project_id = params[:project]
+    @activities = Activity.filter(starting, ending, chargeable, charged, project_id)
+    # unless params[:filter].blank?
+    #   project_ids = Project.where("name ILIKE ?", "%#{params[:filter]}%").ids
+    #   @activities = @activities.where(project_id: project_ids)
+    # end
+    @filter_condition = {starting: starting, ending: ending, chargeable: chargeable, charged: charged, project: project_id}
     @activities = @activities.order(:project_id, :task_id)
 
     respond_to do |format|

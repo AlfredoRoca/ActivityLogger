@@ -74,6 +74,11 @@
     <%= f.check_box :charged %>
   </div>
 
+  <div class="field">
+    <%= f.label :charged_code %><br>
+    <%= f.text_field :charged_code %>
+  </div>
+
   <div class="row">
     <div class="col-md-3 col-md-offset-0 col-sm-4 col-sm-offset-0">
       <div class="datetime-pickers-group">
@@ -96,5 +101,5 @@
 <% end %>
 
 <script>
-  setupDateTimePickers("<%= @activity.try(:start).nil? ? DateTime.now.to_time.iso8601 : @activity.start.to_time.iso8601 %>", "<%= @activity.try(:ended).nil? ? (@activity.try(:start).nil? ? nil : DateTime.now.to_time.iso8601) : @activity.ended.to_time.iso8601 %>");
+  setupDateTimePickers("<%= @activity.try(:start).nil? ? DateTime.now.to_time.iso8601 : @activity.start.to_time.iso8601 %>", "<%= @activity.try(:ended).nil? ? (@activity.try(:start).nil? ? nil : DateTime.now.to_time.iso8601) : @activity.ended.to_time.iso8601 %>", "<%= @activity.try(:charged_date).nil? ? nil : @activity.charged_date.to_time.iso8601 %>");
 </script>

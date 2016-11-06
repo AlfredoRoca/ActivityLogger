@@ -33,14 +33,22 @@
         <%= hidden_field_tag :filter %>
       </div>
       <div class="form-group">
-        Chargeable? <%= select_tag "chargeable", '<option>ALL</option><option>Yes</option><option>No</option>'.html_safe %>
+        Project <%= collection_select nil, :project, Project.open.alfa_order, :id, :name, {include_blank: true}, html_options = { onchange: "$('#table').bootstrapTable('refresh');"} %>
       </div>
       <div class="form-group">
-        Charged? <%= select_tag "charged", '<option>ALL</option><option>Yes</option><option>No</option>'.html_safe %>
+        Chargeable? <%= select_tag "chargeable", '<option>ALL</option><option>Yes</option><option>No</option>'.html_safe, {onchange: "$('#table').bootstrapTable('refresh');"} %>
+      </div>
+      <div class="form-group">
+        Charged? <%= select_tag "charged", '<option>ALL</option><option>Yes</option><option>No</option>'.html_safe, {onchange: "$('#table').bootstrapTable('refresh');"} %>
       </div>
       <div class="form-group">
         <%= button_tag 'Apply filter', onclick: "$('#table').bootstrapTable('refresh');return false;", class: "btn btn-primary" %>
+
         <%= submit_tag "Print PDF Report", onclick: "$('#filter').val($('.search input:text').val()); ", class: "btn btn-default" %>
+
+        <%= button_tag "Charge filtered activities!", id: 'button_charge', onclick: "$('#filter').val($('.search input:text').val()); charge_activities(); return false;", class: "btn btn-danger" %>
+        <%= text_field_tag :charged_date, nil, id: "charged_date", class: "form-control" %>
+        <div></div>
       </div>
     <% end %>
   </div>
@@ -82,7 +90,8 @@
         <th data-field="duration"     data-sortable=true data-searchable=true >Duration</th>
         <th data-field="chargeable"     data-sortable=true data-searchable=true data-formatter=booleanFormatter >Chargeable?</th>
         <th data-field="charged"     data-sortable=true data-searchable=true data-formatter=booleanFormatter >Charged?</th>
-        <th data-field="charged_date" data-sortable=true data-searchable=true  data-formatter=onlyDateFormatter>Charged on</th>
+        <th data-field="charged_date" data-sortable=true data-searchable=true data-formatter=onlyDateFormatter>Charged on</th>
+        <th data-field="charged_code" data-sortable=true data-searchable=true>Charged code</th>
         <th data-field="description"  data-sortable=true data-searchable=true >Description</th>
       </tr>
     </thead>
@@ -97,3 +106,39 @@
 
 <script>bindEventsToTable();</script>
 
+<script>
+  ////////////////////////////////////////////////////////////
+  // call for charge method with the same filter parameters //
+  ////////////////////////////////////////////////////////////
+  function charge_activities() {
+    var doCharge = function() {
+      var filterString = {starting_date: $('#starting_date').val(), ending_date: $('#ending_date').val(), chargeable: $('#chargeable').val(), charged: $('#charged').val(), filter: $('#filter').val(), charged_date: $('#charged_date').val(), project: $('#_project').val()};
+      var url = '<%= charge_activities_path %>';
+      
+      $.ajax({
+        method: "POST",
+        url: url,
+        data: filterString
+      })
+        .done(function(data){
+          console.log('Charge activities result', data);
+          $('#table').bootstrapTable('refresh');
+          message = data.quantity + ' activities charged on ' + data.charged_date + ' with code ' + data.charged_code;
+          alert(message);
+      })
+        .fail(function(){
+          console.log("Charge activities failed!");
+          alert("Charge activities failed!");
+      })
+    }
+
+    if (($('#chargeable').val().toUpperCase() != 'YES') || ($('#charged').val().toUpperCase() != 'NO')) {
+      var retVal = confirm("Charge all these activities?");
+      if( retVal == true ){
+         doCharge();
+      }
+    } else {
+      doCharge();
+    }
+  }
+</script>

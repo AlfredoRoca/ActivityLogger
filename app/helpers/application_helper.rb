@@ -31,4 +31,9 @@ module ApplicationHelper
     date.slice(6,4) + date.slice(3,2) + date.slice(0,2) + " " + date.slice(11,2) + date.slice(14,2) + "00" unless date.nil? || date.length != 16
   end
 
+  def generate_random_string
+    o = [('A'..'Z')].map { |i| i.to_a }.flatten
+    string = (0...5).map { o[rand(o.length)] }.join
+  end
+
 end
