@@ -72,7 +72,7 @@ class ActivityReportPdf < Prawn::Document
     draw_horizontal_line
     data = []
     data[0] = table_header_for_activities_list
-    data = populate_table_for_activities_list(data, @activities)
+    data = populate_table_for_activities_list(data, @activities.order(:project_id, :task_id, :start))
     table(data) do
       header = true
       width = @tables_width_wide
