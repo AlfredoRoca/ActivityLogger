@@ -18,7 +18,7 @@ class ReportsController < ApplicationController
     #   project_ids = Project.where("name ILIKE ?", "%#{params[:filter]}%").ids
     #   @activities = @activities.where(project_id: project_ids)
     # end
-    @filter_condition = {starting: starting, ending: ending, chargeable: chargeable, charged: charged, charged_code: charged_code, project: project_id}
+    @filter_condition = {starting: starting, ending: ending, chargeable: chargeable, charged: charged, charged_code: charged_code, project_id: project_id}
     @activities = @activities.order(:project_id, :task_id)
 
     respond_to do |format|
