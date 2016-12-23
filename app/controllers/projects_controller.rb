@@ -13,6 +13,10 @@ class ProjectsController < ApplicationController
     @projects = Project.all.first_open.alfa_order.page params[:page]
   end
 
+  def tasks
+    @tasks = Project.find_by(id: params[:project_id]).tasks
+  end
+
   # GET /projects/1
   # GET /projects/1.json
   def show

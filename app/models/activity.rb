@@ -98,10 +98,10 @@ class Activity < ActiveRecord::Base
     counter
   end
 
-  def self.filter(starting, ending, chargeable, charged, project_id, charged_code)
-p "**** filter", project_id
+  def self.filter(starting, ending, chargeable, charged, project_id, task_id, charged_code)
     activities = Activity.where('start >= ? and start <= ?', starting, ending).includes(:project, :task, :subtask)
     activities = activities.for_project(project_id) unless project_id.blank?
+    activities = activities.for_task(task_id) unless task_id.blank?
     activities = activities.with_charged_code(charged_code) unless charged_code.blank?
     activities = activities.chargeables if chargeable == "YES"
     activities = activities.not_chargeable if chargeable == "NO"

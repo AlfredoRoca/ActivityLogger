@@ -18,6 +18,7 @@ Rails.application.routes.draw do
     member do
       get :update_activity_duration_per_gittag
     end
+    get :tasks
     resources :gittags
   end
   resources :teams

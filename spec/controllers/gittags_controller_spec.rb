@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe GittagController, type: :controller do
+RSpec.describe GittagsController, type: :controller do
 
   describe "GET #index" do
     it "returns http success" do

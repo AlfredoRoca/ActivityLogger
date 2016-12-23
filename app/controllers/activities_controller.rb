@@ -33,12 +33,13 @@ class ActivitiesController < ApplicationController
     charged = params[:charged].upcase unless params[:charged].nil?
     charged_code = params[:charged_code]
     project_id = params[:project]
+    task_id = params[:task]
     @starting_date = params[:starting_date]
     @ending_date = params[:ending_date]
 
     if request.path_parameters[:format] == 'json'
       if current_user.admin
-        @activities = Activity.filter(starting, ending, chargeable, charged, project_id, charged_code)
+        @activities = Activity.filter(starting, ending, chargeable, charged, project_id, task_id, charged_code)
           # @activities = Activity.where('start >= ? and start <= ?', starting, ending).includes(:project, :task, :subtask, :user)
           # @activities = @activities.chargeables if chargeable == "YES"
           # @activities = @activities.not_chargeable if chargeable == "NO"

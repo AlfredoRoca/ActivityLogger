@@ -12,13 +12,14 @@ class ReportsController < ApplicationController
     charged = params[:charged].upcase unless params[:charged].nil?
     charged_code = params[:charged_code]
     project_id = params[:project]
+    task_id = params[:task]
     detailed = params[:detailed] == "1"
-    @activities = Activity.filter(starting, ending, chargeable, charged, project_id, charged_code)
+    @activities = Activity.filter(starting, ending, chargeable, charged, project_id, task_id, charged_code)
     # unless params[:filter].blank?
     #   project_ids = Project.where("name ILIKE ?", "%#{params[:filter]}%").ids
     #   @activities = @activities.where(project_id: project_ids)
     # end
-    @filter_condition = {starting: starting, ending: ending, chargeable: chargeable, charged: charged, charged_code: charged_code, project_id: project_id}
+    @filter_condition = {starting: starting, ending: ending, chargeable: chargeable, charged: charged, charged_code: charged_code, project_id: project_id, task_id: task_id}
     @activities = @activities.order(:project_id, :task_id)
 
     respond_to do |format|

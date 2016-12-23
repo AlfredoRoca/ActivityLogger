@@ -48,7 +48,7 @@ RSpec.describe ActivitiesController, :type => :controller do
   context "when user is admin" do
 
     before(:each) do
-      login_user(admin)
+      sign_in admin
     end
 
     describe "GET index" do
@@ -58,8 +58,13 @@ RSpec.describe ActivitiesController, :type => :controller do
       end
       
       it "lists all activities" do
-        get :index, {}, valid_session
+        get :index, {format: :json}, valid_session
         expect(assigns(:activities).size).to eq(2)
+      end
+
+      it "lists all activities" do
+        get :index, {format: :html}, valid_session
+        expect(assigns(:activities)).to be_empty
       end
     end
 
@@ -191,14 +196,14 @@ RSpec.describe ActivitiesController, :type => :controller do
   context "when user is not admin" do
 
     before(:each) do
-      login_user(user)
+      sign_in user
     end
 
     describe "GET index" do
       it "lists only his activities" do
         activity = Activity.create! valid_attributes
         activity_user = Activity.create! valid_attributes_for_user
-        get :index, {}, valid_session
+        get :index, {format: :json}, valid_session
         expect(assigns(:activities)).to match_array([activity_user])
       end
     end

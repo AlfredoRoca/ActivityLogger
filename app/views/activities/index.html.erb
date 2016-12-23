@@ -34,7 +34,10 @@
           <%= hidden_field_tag :filter %>
         </div>
         <div class="form-group">
-          Project <%= collection_select nil, :project, Project.open.alfa_order, :id, :name, {include_blank: true}, html_options = { onchange: "$('#table').bootstrapTable('refresh');"} %>
+          Project <%= collection_select nil, :project, Project.open.alfa_order, :id, :name, {include_blank: true}, html_options = { onchange: "$('#table').bootstrapTable('refresh'); fillWithSelectedProjectTasks();"} %>
+        </div>
+        <div class="form-group">
+          Task <%= collection_select nil, :task, Task.all, :id, :name, {include_blank: true}, html_options = { onchange: "$('#table').bootstrapTable('refresh');"} %>
         </div>
         <div class="form-group">
           Chargeable? <%= select_tag "chargeable", '<option>ALL</option><option>Yes</option><option>No</option>'.html_safe, {onchange: "$('#table').bootstrapTable('refresh');"} %>
@@ -153,5 +156,25 @@
     } else {
       doCharge();
     }
+  }
+
+  function fillWithSelectedProjectTasks() {
+    var selectedProject = $('#_project').val();
+    var url = "<%= projects_path %>/" + selectedProject + "/tasks";
+    $.ajax({
+      method: "GET",
+      url: url,
+    })
+    .done(function(data){
+      var options = $('#_task');
+      options.empty().append($("<option value=''></option>"));
+      var listItems = '<option value=""></option>';
+      $.each(data, function(){
+        options.append($("<option />").val(this.id).text(this.name))
+      });
+    })
+    .fail(function(){
+      alert("Fail on filling tasks selector with selected project tasks");
+    })
   }
 </script>

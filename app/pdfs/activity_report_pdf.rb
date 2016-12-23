@@ -24,6 +24,7 @@ class ActivityReportPdf < Prawn::Document
     @charged = filter[:charged]
     @charged_code = filter[:charged_code]
     @project = filter[:project_id] ? Project.find(filter[:project_id]).try(:name) : "ALL"
+    @task = filter[:task_id] ? Task.find(filter[:task_id]).try(:name) : "ALL"
     settings
     header
     move_down 20
@@ -52,7 +53,7 @@ class ActivityReportPdf < Prawn::Document
  
   def header
     text "Activities started between #{localize_date(DateTime.parse(@starting))} and #{localize_date(DateTime.parse(@ending))}", size: @font_big, style: :bold
-    text "Other conditions: chargeable: #{@chargeable}, charged: #{@charged}, charged_code: #{@charged_code}, project: #{@project}", size: @font_normal
+    text "Other conditions: chargeable: #{@chargeable}, charged: #{@charged}, charged_code: #{@charged_code}, project: #{@project}, task: #{@task}", size: @font_normal
   end
  
   def table_header_for_activities_list
