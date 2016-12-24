@@ -10,14 +10,8 @@
 
 require 'rails_helper'
 
-describe "Integration test", type: :feature do
+describe Team, type: :model do
   
-  let!(:admin) { FactoryGirl.create(:user_admin) }
-
-  before(:each) do
-    login_user_post(admin.email, "123")
-  end
-
   context "when checking validations" do
     it "rejects without name" do
       team = FactoryGirl.build :team, name: ""
