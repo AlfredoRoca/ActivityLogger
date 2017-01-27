@@ -63,7 +63,8 @@ class ActivitiesController < ApplicationController
     charged_date = params[:charged_date]
     charged_code = params[:charged_code]
     project_id = params[:project]
-    activities = Activity.filter(starting, ending, chargeable, charged, project_id, charged_code)
+    task_id = params[:task]
+    activities = Activity.filter(starting, ending, chargeable, charged, project_id, task_id, charged_code)
     # unless params[:filter].blank?
     #   project_ids = Project.where("name ILIKE ?", "%#{params[:filter]}%").ids
     #   activities = activities.where(project_id: project_ids)
