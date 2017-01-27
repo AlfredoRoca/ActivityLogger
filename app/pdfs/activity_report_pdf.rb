@@ -23,8 +23,8 @@ class ActivityReportPdf < Prawn::Document
     @chargeable = filter[:chargeable]
     @charged = filter[:charged]
     @charged_code = filter[:charged_code]
-    @project = filter[:project_id] ? Project.find(filter[:project_id]).try(:name) : "ALL"
-    @task = filter[:task_id] ? Task.find(filter[:task_id]).try(:name) : "ALL"
+    @project = filter[:project_id].blank? ? "ALL" : Project.find(filter[:project_id]).try(:name)
+    @task = filter[:task_id].blank? ? "ALL" : Task.find(filter[:task_id]).try(:name)
     settings
     header
     move_down 20
@@ -103,10 +103,10 @@ class ActivityReportPdf < Prawn::Document
     total_lines = @activities.size
     summary_line = "Total duration: #{total_duration} in #{total_lines} lines"
     text summary_line, size: @font_normal, style: :bold
-    daily_hours = 8
-    working_days = total_duration.split(':').first.to_f / daily_hours
-    h,m,s = total_duration.split(':').map(&:to_i)
-    text "#{working_days} working days of #{daily_hours} hours (#{h/daily_hours} w.d. + #{h%daily_hours} h)"
+    # daily_hours = 8
+    # working_days = total_duration.split(':').first.to_f / daily_hours
+    # h,m,s = total_duration.split(':').map(&:to_i)
+    # text "#{working_days} working days of #{daily_hours} hours (#{h/daily_hours} w.d. + #{h%daily_hours} h)"
   end
 
   def print_summary_per_project
